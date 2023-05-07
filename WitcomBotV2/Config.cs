@@ -6,4 +6,5 @@ public class Config
     public string BotToken { get; set; }
     public bool Debug { get; set; }
     public ulong DiscAdminId { get; set; }
+    public int TriggerLengthLimit { get; set; }
 }

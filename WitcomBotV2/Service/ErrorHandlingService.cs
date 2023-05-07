@@ -7,17 +7,17 @@ public class ErrorHandlingService
     private static readonly Dictionary<ErrorCodes, string> ErrorDescriptions = new()
     {
         {
-            ErrorCodes.PermissionDenied, "You are not permitted to run this command.\n{0}"
+            ErrorCodes.PermissionDenied, "คุณไม่มีสิทธิ์ในการใช้คำสั่งนี้\n{0}"
         },
         {
             ErrorCodes.UnableToParseDuration,
-            "{0} is invalid.\nThe duration must be a whole number followed by a single modifier letter of 's', 'm', 'h', 'd', 'w', 'M' or 'y'"
+            "{0} นั้นไม่ถูกต้อง.\nคุณต้องใส่เวลาเป็นจำนวนเต็มพร้อมด้วยตัวกำกับ เช่น 's', 'm', 'h', 'd', 'w', 'M' or 'y'"
         },
         {
-            ErrorCodes.SpecifiedUserNotFound, "The specified user ({0}) is not in the server."
+            ErrorCodes.SpecifiedUserNotFound, "ผู้ใช้ ({0}) ไม่อยู่ในเซิร์ฟเวอร์นี้"
         },
         {
-            ErrorCodes.InternalCommandError, "Joker broke something, ping him.\n{0}"
+            ErrorCodes.InternalCommandError, "กูพังอะไรไปสักอย่าง ปิง User_NotExist\n{0}"
         },
         {
             ErrorCodes.InvalidChannelId, "No channel with the provided ID {0} exists."
@@ -26,10 +26,10 @@ public class ErrorHandlingService
             ErrorCodes.UnableToParseDate, "The date {0} is invalid."
         },
         {
-            ErrorCodes.InvalidNumberOfArguments, "This command requires {0} arguments."
+            ErrorCodes.InvalidNumberOfArguments, "คำสั่งนี้ต้องใส่ {0} ค่า"
         },
         {
-            ErrorCodes.DatabaseNotFound, "Joker broke something, ping him."
+            ErrorCodes.DatabaseNotFound, "กูพังอะไรไปสักอย่าง ปิง User_NotExist"
         },
         {
             ErrorCodes.FailedToParseTitle,
@@ -45,10 +45,10 @@ public class ErrorHandlingService
             ErrorCodes.InvalidMessageId, "No message with ID {0} was found."
         },
         {
-            ErrorCodes.Unspecified, "You probably used this wrong, but ping Joker anyways.\n{0}"
+            ErrorCodes.Unspecified, "แกน่าจะใช้อะไรสักอย่างผิดไป แต่ก็ปิง User_NotExist มาเหอะ\n{0}"
         },
         {
-            ErrorCodes.TriggerLengthExceedsLimit, "Ping triggers are limited to {0} characters in length."
+            ErrorCodes.TriggerLengthExceedsLimit, "Ping triggers มีตัวอักษรได้สูงสุด {0} ตัว"
         },
         {
             ErrorCodes.AlreadyExists, "An entry with that identifier already exists."

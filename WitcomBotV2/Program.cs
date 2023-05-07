@@ -9,6 +9,7 @@ public class Program
     private static string KCfile = "config.json";
     private static Bot? _bot;
 
+    public static string DatabaseFile { get; } = Path.Combine(Environment.CurrentDirectory, "Witcom.db");
     public static Config Config => _config ??= GetConfig();
 
     public static void Main(string[] args)
