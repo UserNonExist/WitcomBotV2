@@ -57,5 +57,3 @@ C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\ref\Witco
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Victoria.dll
-C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Lavalink4NET.dll
-C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Lavalink4NET.DiscordNet.dll
