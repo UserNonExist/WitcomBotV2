@@ -12,7 +12,14 @@ public class AskGPTCommand : InteractionModuleBase<SocketInteractionContext>
     public async Task AskGPT([Discord.Interactions.Summary("Question", "คำถาม")] [Remainder] string question)
     {
         string txt = GPTModule.AskGPT3(question).Result;
-        await RespondAsync(
-            embed: await EmbedBuilderService.CreateBasicEmbed("GPT-3", txt , Color.Blue));
+        try
+        {
+            await RespondAsync(
+                embed: await EmbedBuilderService.CreateBasicEmbed("GPT-3", txt, Color.Blue));
+        }
+        catch (Exception e)
+        {
+            await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.ToString());
+        }
     }
 }
