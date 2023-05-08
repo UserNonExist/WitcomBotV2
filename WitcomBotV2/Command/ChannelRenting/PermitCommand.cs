@@ -19,6 +19,7 @@ public partial class RentCommand : InteractionModuleBase<SocketInteractionContex
         }
 
         List<IGuildUser> guildUsers = new();
+        string userMention = "";
 
         foreach (string s in users.Split(' '))
         {
@@ -33,9 +34,12 @@ public partial class RentCommand : InteractionModuleBase<SocketInteractionContex
         IVoiceChannel channel = Bot.Instance.Guild.GetVoiceChannel(Module.ChannelRenting.RentedChannels[Context.User]);
 
         foreach (IGuildUser user in guildUsers)
+        {
             await channel.AddPermissionOverwriteAsync(user, new OverwritePermissions(connect: PermValue.Allow));
+            userMention += user.Mention + "\n";
+        }
 
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("VC Renting",
-            "ผู้ใช้ที่เลือกไว้สามารถเข้า VC คุณได้แล้ว", Color.Magenta));
+            "ผู้ใช้ดังต่อไปนี้สามารถเข้า VC คุณได้แล้ว\n\n" + userMention, Color.Magenta));
     }
 }
