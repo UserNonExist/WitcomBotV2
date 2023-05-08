@@ -12,7 +12,9 @@ C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Discord.N
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Discord.Net.WebSocket.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\LiteDB.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Data.Sqlite.dll
+C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\SQLitePCLRaw.batteries_v2.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\SQLitePCLRaw.core.dll
@@ -20,6 +22,7 @@ C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\SQLitePCL
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\System.Interactive.Async.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\System.Linq.Async.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\System.Reactive.dll
+C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Victoria.dll
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\runtimes\alpine-arm\native\libe_sqlite3.so
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\runtimes\alpine-arm64\native\libe_sqlite3.so
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\runtimes\alpine-x64\native\libe_sqlite3.so
@@ -54,6 +57,3 @@ C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\refint\Wi
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\WitcomBotV2.pdb
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\WitcomBotV2.genruntimeconfig.cache
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\ref\WitcomBotV2.dll
-C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
-C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Victoria.dll

@@ -54,6 +54,8 @@ public class Bot
         InteractionService = new InteractionService(Client);
         SlashCommandHandler = new SlashCommandHandler(InteractionService, Client);
 
+        Log.Debug(nameof(Init), "Setting up VC renting...");
+        Client.UserVoiceStateUpdated += ChannelRenting.OnVoiceStateChanged;
 
         Log.Debug(nameof(Init), "Setting up logging..");
         InteractionService.Log += Log.Send;

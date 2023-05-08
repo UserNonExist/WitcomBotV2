@@ -12,7 +12,7 @@ public class InfoCommand : InteractionModuleBase<SocketInteractionContext>
     {
         string message =
             "WitcomBotV2 สร้างโดย User_NotExist ซึ่งเขียนใหม่แทนอันเก่าที่ unoptimized\n\n" +
-            "สามารถ contribute ได้ที่ https://github.com/UserNonExist/WitcomBotV2\n" +
+            "สามารถช่วยพัฒนาได้ที่ https://github.com/UserNonExist/WitcomBotV2\n" +
             "เวอร์ชั่นปัจจุบัน: " + Assembly.GetExecutingAssembly().GetName().Version;
 
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Info", message, Color.Gold),

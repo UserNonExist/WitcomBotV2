@@ -20,10 +20,10 @@ public class ErrorHandlingService
             ErrorCodes.InternalCommandError, "กูพังอะไรไปสักอย่าง ปิง User_NotExist\n{0}"
         },
         {
-            ErrorCodes.InvalidChannelId, "No channel with the provided ID {0} exists."
+            ErrorCodes.InvalidChannelId, "หาห้องไอดี {0} ไม่เจอ"
         },
         {
-            ErrorCodes.UnableToParseDate, "The date {0} is invalid."
+            ErrorCodes.UnableToParseDate, "วันที่ {0} นั้นไม่ถูกต้อง"
         },
         {
             ErrorCodes.InvalidNumberOfArguments, "คำสั่งนี้ต้องใส่ {0} ค่า"
@@ -36,13 +36,13 @@ public class ErrorHandlingService
             "No valid title was found. Titles for embeds must be encased in \"double-quotes\""
         },
         {
-            ErrorCodes.FailedToParseColor, "{0} is not a valid HTML HEX color code."
+            ErrorCodes.FailedToParseColor, "{0} ไม่ใช่ HTML HEX color code"
         },
         {
-            ErrorCodes.NoRecordFound, "No database records for {0} were found."
+            ErrorCodes.NoRecordFound, "ไม่มีข้อมูลของ {0} ในระบบ"
         },
         {
-            ErrorCodes.InvalidMessageId, "No message with ID {0} was found."
+            ErrorCodes.InvalidMessageId, "หาข้อความไอดี {0} ไม่เจอ"
         },
         {
             ErrorCodes.Unspecified, "แกน่าจะใช้อะไรสักอย่างผิดไป แต่ก็ปิง User_NotExist มาเหอะ\n{0}"

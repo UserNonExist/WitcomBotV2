@@ -1,4 +1,6 @@
-﻿namespace WitcomBotV2;
+﻿using System.Security.Cryptography;
+
+namespace WitcomBotV2;
 
 using Newtonsoft.Json;
 using System.Reflection;
@@ -11,6 +13,7 @@ public class Program
 
     public static string DatabaseFile { get; } = Path.Combine(Environment.CurrentDirectory, "Witcom.db");
     public static Config Config => _config ??= GetConfig();
+    public static Random Rng { get; } = new();
 
     public static void Main(string[] args)
     {

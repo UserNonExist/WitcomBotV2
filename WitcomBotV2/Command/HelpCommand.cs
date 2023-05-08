@@ -49,6 +49,6 @@ public class HelpCommand : InteractionModuleBase<SocketInteractionContext>
             }
         }
 
-        await RespondAsync(embed: builder.Build(), ephemeral: true);
+        await RespondAsync(embed: builder.Build(), ephemeral: false);
     }
 }
