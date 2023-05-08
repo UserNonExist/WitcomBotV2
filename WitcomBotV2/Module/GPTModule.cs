@@ -11,7 +11,6 @@ public class GPTModule
     public static async Task Init()
     {
         _openAiApi = new OpenAIAPI(Program.Config.OpenAIAPIKey);
-        
     }
     
     public static async Task<string> AskGPT3(string question)
@@ -22,7 +21,7 @@ public class GPTModule
         
         string response = await conversation.GetResponseFromChatbotAsync();
         Log.Debug(nameof(AskGPT3), response);
-        txt = $"Question: {question}\nAnswer: " + response;
+        txt = $"Question: {question}\n\nAnswer: " + response;
         return txt;
     }
 }
