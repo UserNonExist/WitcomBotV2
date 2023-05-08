@@ -12,9 +12,10 @@ public class ChannelRenting
 
     private static List<string> ChannelNames { get; } = new()
     {
-        "testing %user VC",
-        "%user hellhole",
-        "%user's basement"
+        "ห้องของ %user",
+        "%user's hellhole",
+        "ห้องใต้ดินของ %user",
+        "ที่นอนเล่นของ %user"
     };
 
     public static async Task OnVoiceStateChanged(SocketUser user, SocketVoiceState before, SocketVoiceState after)

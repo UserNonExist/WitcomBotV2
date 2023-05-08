@@ -9,4 +9,5 @@ public class Config
     public int TriggerLengthLimit { get; set; }
     public ulong ChannelRentId { get; set; }
     public ulong ChannelRentCatId { get; set; }
+    public string OpenAIAPIKey { get; set; }
 }

@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Discord.Commands;
 using Discord;
 using Discord.Rest;
+using OpenAI_API;
 using Victoria.Node;
 using WitcomBotV2.Command;
 using WitcomBotV2.Module;
@@ -68,6 +69,8 @@ public class Bot
         Client.Ready += async () =>
         { Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
+            Log.Debug(nameof(Init), "Initializing OpenAIAPI..");
+            await GPTModule.Init();
 
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsToGuildAsync(Guild.Id)).Count;
 
@@ -82,5 +85,4 @@ public class Bot
 
         await Task.Delay(-1);
     }
-
 }
