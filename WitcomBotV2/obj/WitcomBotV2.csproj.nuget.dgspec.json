@@ -66,6 +66,14 @@
               "target": "Package",
               "version": "[3.10.0, )"
             },
+            "Lavalink4NET": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Lavalink4NET.Discord.NET": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "LiteDB": {
               "target": "Package",
               "version": "[5.0.16, )"
@@ -85,10 +93,6 @@
             "OpenAI": {
               "target": "Package",
               "version": "[1.7.2, )"
-            },
-            "Victoria": {
-              "target": "Package",
-              "version": "[6.0.1026, )"
             }
           },
           "imports": [

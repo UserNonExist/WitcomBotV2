@@ -10,4 +10,5 @@ public class Config
     public ulong ChannelRentId { get; set; }
     public ulong ChannelRentCatId { get; set; }
     public string OpenAIAPIKey { get; set; }
+    public string UnloadPassword { get; set; }
 }

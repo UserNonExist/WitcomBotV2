@@ -3,8 +3,10 @@ using Discord.WebSocket;
 using Discord.Commands;
 using Discord;
 using Discord.Rest;
+using Lavalink4NET;
+using Lavalink4NET.DiscordNet;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI_API;
-using Victoria.Node;
 using WitcomBotV2.Command;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
@@ -13,12 +15,11 @@ namespace WitcomBotV2;
 
 public class Bot
 {
-    private DiscordSocketClient? _client;
+    private static DiscordSocketClient? _client;
     private SocketGuild? _guild;
-    private LavaNode _lavaNode;
 
     public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == 979024475729305630);
-    private DiscordSocketClient Client => _client ??= new DiscordSocketClient(new DiscordSocketConfig
+    public static DiscordSocketClient Client => _client ??= new DiscordSocketClient(new DiscordSocketConfig
         { AlwaysDownloadUsers = true, MessageCacheSize = 10000 });
 
     public InteractionService InteractionService { get; private set; } = null!;
@@ -71,6 +72,8 @@ public class Bot
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
             Log.Debug(nameof(Init), "Initializing OpenAIAPI..");
             await GPTModule.Init();
+            Log.Debug(nameof(Init), "Initializing MusicModule..");
+            await MusicModule.Init();
 
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsToGuildAsync(Guild.Id)).Count;
 

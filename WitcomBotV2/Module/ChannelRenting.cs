@@ -20,6 +20,9 @@ public class ChannelRenting
 
     public static async Task OnVoiceStateChanged(SocketUser user, SocketVoiceState before, SocketVoiceState after)
     {
+        if (user.IsBot)
+            return;
+
         if (after.VoiceChannel != null && after.VoiceChannel.Id == Program.Config.ChannelRentId)
             await HandleUserJoined(user, before, after);
         else if (before.VoiceChannel != null && IsRented(before.VoiceChannel.Id))
