@@ -6,11 +6,11 @@ Overhaul WitcomBot using .NET heavily based on https://github.com/Exiled-Team/BL
  - ChannelRenting
  - PingTrigger
  - AskGPT
+ - MusicPlayer
 
 ## Feature to Implement
 
  - HomeworkTracker
  - SelfRole
- - MusicPlayer
 
 Contribution is very welcome, please make a pull request if you want to contribute.
