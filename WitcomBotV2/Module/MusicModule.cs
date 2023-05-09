@@ -2,6 +2,7 @@
 using Discord.Interactions;
 using Discord.WebSocket;
 using Lavalink4NET;
+using Lavalink4NET.Artwork;
 using Lavalink4NET.DiscordNet;
 using Lavalink4NET.Player;
 using Lavalink4NET.Rest;
@@ -14,6 +15,7 @@ namespace WitcomBotV2.Module;
 public class MusicModule: InteractionModuleBase<SocketInteractionContext>
 {
     public static IAudioService _audioService;
+    public static ArtworkService _artworkService;
     public static async Task Init()
     {
         _audioService = new LavalinkNode(new LavalinkNodeOptions
@@ -40,6 +42,9 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
             }
             await Task.Delay(5000);
         }
+
+        _artworkService = new ArtworkService();
+        
         Log.Info(nameof(Init), "Lavalink connected.");
     }
 
