@@ -15,12 +15,12 @@ namespace WitcomBotV2;
 
 public class Bot
 {
-    private static DiscordSocketClient? _client;
+    private static DiscordShardedClient _client;
     private SocketGuild? _guild;
 
     public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == 979024475729305630);
-    public static DiscordSocketClient Client => _client ??= new DiscordSocketClient(new DiscordSocketConfig
-        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = null, ShardId = 1});
+    public static DiscordShardedClient Client => _client ??= new DiscordShardedClient(new DiscordSocketConfig
+        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = 2});
 
     public InteractionService InteractionService { get; private set; } = null!;
     public SlashCommandHandler SlashCommandHandler { get; private set; } = null!;
@@ -67,10 +67,11 @@ public class Bot
 
         Log.Debug(nameof(Init), "Installing Slash commands..");
         await SlashCommandHandler.InstallCommandAsync();
-        
-        
-        Client.Ready += async () =>
-        { Log.Debug(nameof(Init), "Initializing Database..");
+
+
+        Client.ShardReady += async async =>
+        {
+            Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
             Log.Debug(nameof(Init), "Initializing OpenAIAPI..");
             await GPTModule.Init();

@@ -6,7 +6,7 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command;
 
-public class AskGPTCommand : InteractionModuleBase<SocketInteractionContext>
+public class AskGPTCommand : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("askgpt", "ถาม GPT-3")]
     public async Task AskGPT([Discord.Interactions.Summary("Question", "คำถาม")] [Remainder] string question)

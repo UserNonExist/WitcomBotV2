@@ -6,7 +6,7 @@ using WitcomBotV2.Service;
 namespace WitcomBotV2.Command.ChannelRenting;
 
 [Discord.Interactions.Group("rent", "คำสั่งเพื่อควบคุมการเช่าห้อง VC")]
-public partial class RentCommand : InteractionModuleBase<SocketInteractionContext>
+public partial class RentCommand : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("deny", "ห้ามคนที่เลือกไม่ให้เข้า VC คุณ")]
     public async Task Deny([Discord.Interactions.Summary("Users", "คนที่จะไม่สามารถเข้าได้")] [Remainder] string users)

@@ -4,7 +4,7 @@ using Discord.Rest;
 
 namespace WitcomBotV2.Command;
 
-public class UnloadCommand : InteractionModuleBase<SocketInteractionContext>
+public class UnloadCommand : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("unloadslash", "unload slash command, need password")]
     public async Task unload_guild_slash(string password)

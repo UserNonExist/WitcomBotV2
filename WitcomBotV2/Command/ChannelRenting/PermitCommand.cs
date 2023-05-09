@@ -5,7 +5,7 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command.ChannelRenting;
 
-public partial class RentCommand : InteractionModuleBase<SocketInteractionContext>
+public partial class RentCommand : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("allow", "อนุญาติให้คนที่เลือกเข้า VC คุณ")]
     public async Task Permit([Discord.Interactions.Summary("Users", "คนที่จะเข้าได้")] [Remainder] string users)
