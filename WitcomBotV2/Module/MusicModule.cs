@@ -19,7 +19,7 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
     public static ArtworkService _artworkService;
     public static DiscordClientWrapper _discordClientWrapper;
     
-    public static InactivityTrackingOptions options = new InactivityTrackingOptions
+    public static InactivityTrackingOptions _Inactivityoptions = new InactivityTrackingOptions
     {
         DisconnectDelay = TimeSpan.FromMinutes(2),
         PollInterval = TimeSpan.FromMinutes(1),
@@ -32,9 +32,9 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
         
         _audioService = new LavalinkNode(new LavalinkNodeOptions
         {
-            RestUri = "http://localhost:2333/",
-            WebSocketUri = "ws://localhost:2333/",
-            Password = "youshallnotpass"
+            RestUri = Program.Config.LLRESTUri,
+            WebSocketUri = Program.Config.LLWebSocketUri,
+            Password = Program.Config.LLPassword
         }, _discordClientWrapper);
         
         Log.Debug(nameof(Init), "Setting up Lavalink...");
@@ -94,7 +94,7 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
         var result = await _audioService.JoinAsync<VoteLavalinkPlayer>(user.Guild.Id, user.VoiceChannel.Id);
         
         await result.SetVolumeAsync(0.3f);
-        new InactivityTrackingService(_audioService, _discordClientWrapper, options);
+        new InactivityTrackingService(_audioService, _discordClientWrapper, _Inactivityoptions);
         
         return result;
     }

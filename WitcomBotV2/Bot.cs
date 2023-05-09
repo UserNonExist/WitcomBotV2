@@ -20,7 +20,7 @@ public class Bot
 
     public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == 979024475729305630);
     public static DiscordSocketClient Client => _client ??= new DiscordSocketClient(new DiscordSocketConfig
-        { AlwaysDownloadUsers = true, MessageCacheSize = 10000 });
+        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = null, ShardId = 1});
 
     public InteractionService InteractionService { get; private set; } = null!;
     public SlashCommandHandler SlashCommandHandler { get; private set; } = null!;
@@ -76,10 +76,12 @@ public class Bot
             await GPTModule.Init();
             Log.Debug(nameof(Init), "Initializing MusicModule..");
             await MusicModule.Init();
-
+            
+            Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsToGuildAsync(Guild.Id)).Count;
 
             Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
+            Log.Debug(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
         };
         
         
@@ -87,7 +89,7 @@ public class Bot
         await Client.LoginAsync(TokenType.Bot, Program.Config.BotToken);
         await Client.StartAsync();
         _ = Task.Run(() => Client.SetGameAsync("Counter Strike 2", null, ActivityType.Watching));
-        Log.Debug(nameof(Init), "Logged in.");
+        Log.Debug(nameof(Init), $"Logged in");
 
         await Task.Delay(-1);
     }
