@@ -67,6 +67,8 @@ public class Bot
 
         Log.Debug(nameof(Init), "Installing Slash commands..");
         await SlashCommandHandler.InstallCommandAsync();
+        
+        
         Client.Ready += async () =>
         { Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
@@ -79,6 +81,7 @@ public class Bot
 
             Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
         };
+        
         
         Log.Debug(nameof(Init), "Logging in...");
         await Client.LoginAsync(TokenType.Bot, Program.Config.BotToken);

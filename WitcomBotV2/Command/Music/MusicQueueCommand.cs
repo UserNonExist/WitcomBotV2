@@ -20,7 +20,7 @@ public partial class MusicCommand
         if (player.Queue.IsEmpty)
         {
             await RespondAsync(
-                embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Blue));
+                embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Purple));
             return;
         }
         

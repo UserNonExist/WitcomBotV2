@@ -20,9 +20,6 @@ public class ChannelRenting
 
     public static async Task OnVoiceStateChanged(SocketUser user, SocketVoiceState before, SocketVoiceState after)
     {
-        if (user.IsBot)
-            return;
-
         if (after.VoiceChannel != null && after.VoiceChannel.Id == Program.Config.ChannelRentId)
             await HandleUserJoined(user, before, after);
         else if (before.VoiceChannel != null && IsRented(before.VoiceChannel.Id))
@@ -79,7 +76,7 @@ public class ChannelRenting
 
     private static async Task HandleUserLeft(SocketUser user, SocketVoiceState before, SocketVoiceState after)
     {
-        if (before.VoiceChannel.ConnectedUsers.Count == 0)
+        if (before.VoiceChannel.ConnectedUsers.Count <= 0)
         {
             await before.VoiceChannel.DeleteAsync();
             RentedChannels.Remove(user);

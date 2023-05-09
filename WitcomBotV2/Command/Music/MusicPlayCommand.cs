@@ -28,6 +28,8 @@ public partial class MusicCommand
             return;
         }
 
+        await player.SetVolumeAsync(0.3f);
+
         if (response.Tracks.Length > 1)
         {
             List<LavalinkTrack> playlist = response.Tracks.ToList();

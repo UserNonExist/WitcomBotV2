@@ -6,6 +6,7 @@ using Lavalink4NET.Artwork;
 using Lavalink4NET.DiscordNet;
 using Lavalink4NET.Player;
 using Lavalink4NET.Rest;
+using Lavalink4NET.Tracking;
 using Microsoft.Extensions.DependencyInjection;
 using WitcomBotV2.Service;
 
@@ -16,14 +17,25 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
 {
     public static IAudioService _audioService;
     public static ArtworkService _artworkService;
+    public static DiscordClientWrapper _discordClientWrapper;
+    
+    public static InactivityTrackingOptions options = new InactivityTrackingOptions
+    {
+        DisconnectDelay = TimeSpan.FromMinutes(2),
+        PollInterval = TimeSpan.FromMinutes(1),
+        TrackInactivity = true
+    };
+    
     public static async Task Init()
     {
+        _discordClientWrapper = new DiscordClientWrapper(Bot.Client);
+        
         _audioService = new LavalinkNode(new LavalinkNodeOptions
         {
             RestUri = "http://localhost:2333/",
             WebSocketUri = "ws://localhost:2333/",
             Password = "youshallnotpass"
-        }, new DiscordClientWrapper(Bot.Client));
+        }, _discordClientWrapper);
         
         Log.Debug(nameof(Init), "Setting up Lavalink...");
         
@@ -45,6 +57,12 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
 
         _artworkService = new ArtworkService();
         
+        var service = new InactivityTrackingService(_audioService, 
+            _discordClientWrapper,
+            new InactivityTrackingOptions());
+        
+        service.BeginTracking();
+
         Log.Info(nameof(Init), "Lavalink connected.");
     }
 
@@ -71,7 +89,13 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
             await context.Interaction.RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "บอทไม่ได้อยู่ในห้องเสียง", Color.Red));
             return null;
         }
+        
 
-        return await _audioService.JoinAsync<VoteLavalinkPlayer>(user.Guild.Id, user.VoiceChannel.Id);
+        var result = await _audioService.JoinAsync<VoteLavalinkPlayer>(user.Guild.Id, user.VoiceChannel.Id);
+        
+        await result.SetVolumeAsync(0.3f);
+        new InactivityTrackingService(_audioService, _discordClientWrapper, options);
+        
+        return result;
     }
 }
