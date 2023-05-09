@@ -66,3 +66,5 @@ C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\refint\Wi
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\WitcomBotV2.pdb
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\WitcomBotV2.genruntimeconfig.cache
 C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\obj\Debug\net6.0\ref\WitcomBotV2.dll
+C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\JsonSubTypes.dll
+C:\Users\U_NotExist\Documents\WitcomBotV2\WitcomBotV2\bin\Debug\net6.0\Notion.Client.dll

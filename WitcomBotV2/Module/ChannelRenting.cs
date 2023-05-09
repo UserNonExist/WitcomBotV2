@@ -23,10 +23,7 @@ public class ChannelRenting
         if (after.VoiceChannel != null && after.VoiceChannel.Id == Program.Config.ChannelRentId)
             await HandleUserJoined(user, before, after);
         else if (before.VoiceChannel != null && IsRented(before.VoiceChannel.Id))
-        {
-            Log.Debug($"{nameof(ChannelRenting)}.{nameof(HandleUserLeft)}", "Firing user left event.");
             await HandleUserLeft(user, before, after);
-        }
     }
     
     private static async Task HandleUserJoined(SocketUser user, SocketVoiceState before, SocketVoiceState after)
