@@ -28,7 +28,7 @@ public partial class MusicCommand
             
             List<LavalinkTrack> playlist = response.Tracks.ToList();
             
-            await player.SetVolumeAsync(0.3f);
+            await player.SetVolumeAsync(0.25f);
 
             for (int i = 0; i < playlist.Count; i++)
             {
@@ -48,7 +48,7 @@ public partial class MusicCommand
             return;
         }
 
-        await player.SetVolumeAsync(0.3f);
+        await player.SetVolumeAsync(0.25f);
 
         var position = await player.PlayAsync(track, enqueue: true);
 
