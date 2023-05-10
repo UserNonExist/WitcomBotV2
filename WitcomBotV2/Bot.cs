@@ -23,7 +23,7 @@ public class Bot
 
     public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == Program.Config.GuildId);
     public static DiscordShardedClient Client => _client ??= new DiscordShardedClient(new DiscordSocketConfig
-        { AlwaysDownloadUsers = true, MessageCacheSize = 10000});
+        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = Program.Config.TotalShards});
     //Dont forget to change!!
 
     public InteractionService InteractionService { get; private set; } = null!;
@@ -92,6 +92,7 @@ public class Bot
             Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
             Log.Debug(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
             Log.Debug(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
+            Log.Info(nameof(Init), $"This is shard {_.ShardId} of {Client.Shards.Count} shards.");
         };
         
         

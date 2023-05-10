@@ -11,6 +11,6 @@ public class StatusCommand : InteractionModuleBase<ShardedInteractionContext>
     public async Task Status()
     {
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Status",
-            $"กำลังใช้ Shards: {Bot.Client.GetShardIdFor(Context.Guild)}\nจำนวนเซิร์ฟเวอร์ปัจจุบัน: {Bot.Client.Guilds.Count}\n\nPing: {Bot.Client.Latency}", Color.Gold));
+            $"กำลังใช้ Shards ที่ {Bot.Client.GetShardIdFor(Context.Guild)+1} จาก {Bot.Client.Shards.Count}\nจำนวนเซิร์ฟเวอร์ปัจจุบัน: {Bot.Client.Guilds.Count}\n\nปิง: {Bot.Client.Latency} ms", Color.Green));
     }
 }
