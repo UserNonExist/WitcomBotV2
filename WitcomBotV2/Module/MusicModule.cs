@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Discord.Rest;
 using Discord.WebSocket;
 using Lavalink4NET;
 using Lavalink4NET.Artwork;
@@ -31,18 +32,12 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
     {
         _discordClientWrapper = new DiscordClientWrapper(Bot.Client);
         
-        _audioService = new LavalinkCluster(new LavalinkClusterOptions
-        {
-            Nodes = new[]
-            {
-                new LavalinkNodeOptions
+        _audioService = new LavalinkNode(new LavalinkNodeOptions
                 {
                     RestUri = Program.Config.LLRESTUri,
                     WebSocketUri = Program.Config.LLWebSocketUri,
                     Password = Program.Config.LLPassword
-                }
-            }
-        }, _discordClientWrapper);
+                }, _discordClientWrapper);
         
         
         Log.Debug(nameof(Init), "Setting up Lavalink...");
@@ -68,6 +63,8 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         var service = new InactivityTrackingService(_audioService, 
             _discordClientWrapper,
             new InactivityTrackingOptions());
+        
+        
         
         service.BeginTracking();
 
@@ -106,4 +103,33 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         
         return result;
     }
+    
+    /*public static async Task HandleButton(SocketMessageComponent component)
+    {
+        Log.Debug(nameof(HandleButton), $"Handling button {component.Data.CustomId} from {component.User.Username}#{component.User.Discriminator} ({component.User.Id})");
+        
+        if (component.Data.CustomId == Modal.MusicModal.PreviousButton.CustomId)
+        {
+            var message = await component.Channel.GetMessageAsync(component.Message.Id);
+            foreach (var content in _pages)
+            {
+                if (message.Interaction != content.Key.Interaction)
+                {
+                    continue;
+                }
+                
+                int index = _pages[content.Key].IndexOf(message.Embeds.);
+                
+                if (index == 0)
+                {
+                    await component.RespondAsync("ไม่มีหน้าก่อนหน้านี้แล้ว", ephemeral: true);
+                    return;
+                }
+            }
+            
+            
+        }
+    }
+    
+    public static Dictionary<RestInteractionMessage, List<Embed>> _pages = new();*/
 }

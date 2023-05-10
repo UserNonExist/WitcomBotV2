@@ -1,5 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Discord.Rest;
+using Discord.WebSocket;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
@@ -31,24 +33,27 @@ public partial class MusicCommand
         embedBuilder.WithFooter(EmbedBuilderService.FooterText);
         
         int count = 0;
-        
+
         foreach (var track in player.Queue.Tracks)
         {
             count += 1;
             embedBuilder.AddField($"{count}. {track.Title}", track.Uri);
             
-            if (count == 24)
+            if (count % 15 == 0)
             {
-                await RespondAsync(embed: embedBuilder.Build());
+                await ReplyAsync(embed: embedBuilder.Build());
+
+
                 embedBuilder = new();
                 embedBuilder.WithColor(Color.Purple);
                 embedBuilder.WithCurrentTimestamp();
                 embedBuilder.WithTitle("Queue Contd.");
                 embedBuilder.WithFooter(EmbedBuilderService.FooterText);
-                count = 0;
             }
         }
-        
-        await RespondAsync(embed: embedBuilder.Build(), ephemeral: false);
+
+        var components = await Modal.MusicModal.CreateButton();
+
+        await RespondAsync(embed: embedBuilder.Build(), ephemeral: false, components: components);
     }
 }

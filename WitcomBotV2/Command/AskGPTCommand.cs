@@ -8,6 +8,7 @@ namespace WitcomBotV2.Command;
 
 public class AskGPTCommand : InteractionModuleBase<ShardedInteractionContext>
 {
+    [DefaultMemberPermissions(GuildPermission.SendMessages)]
     [SlashCommand("askgpt", "ถาม GPT-3")]
     public async Task AskGPT([Discord.Interactions.Summary("Question", "คำถาม")] [Remainder] string question)
     {

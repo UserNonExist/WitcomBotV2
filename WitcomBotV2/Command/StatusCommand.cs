@@ -6,10 +6,11 @@ namespace WitcomBotV2.Command;
 
 public class StatusCommand : InteractionModuleBase<ShardedInteractionContext>
 {
+    [DefaultMemberPermissions(GuildPermission.SendMessages)]
     [SlashCommand("status", "ดูสถานะของบอท")]
     public async Task Status()
     {
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Status",
-            $"จำนวน Shards: {Bot.Client.Shards.Count}\n\nPing: {Bot.Client.Latency}", Color.Gold));
+            $"กำลังใช้ Shards: {Bot.Client.GetShardIdFor(Context.Guild)}\nจำนวนเซิร์ฟเวอร์ปัจจุบัน: {Bot.Client.Guilds.Count}\n\nPing: {Bot.Client.Latency}", Color.Gold));
     }
 }

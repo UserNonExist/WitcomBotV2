@@ -7,6 +7,7 @@ namespace WitcomBotV2.Command;
 
 public class InfoCommand : InteractionModuleBase<ShardedInteractionContext>
 {
+    [DefaultMemberPermissions(GuildPermission.SendMessages)]
     [SlashCommand("info", "ดูข้อมูลเกี่ยวกับบอท")]
     public async Task Info()
     {

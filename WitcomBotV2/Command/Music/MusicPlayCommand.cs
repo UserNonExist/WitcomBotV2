@@ -1,4 +1,6 @@
-﻿using Discord;
+﻿using System.Net;
+using System.Net.Security;
+using Discord;
 using Discord.Interactions;
 using Lavalink4NET.Player;
 using Lavalink4NET.Rest;
@@ -9,6 +11,7 @@ namespace WitcomBotV2.Command.Music;
 
 public partial class MusicCommand
 {
+    [DefaultMemberPermissions(GuildPermission.Speak | GuildPermission.Connect | GuildPermission.SendMessages)]
     [SlashCommand("play", "เล่นเพลง", runMode: RunMode.Async)]
     public async Task Play(string query)
     {
@@ -19,21 +22,13 @@ public partial class MusicCommand
             return;
         }
 
-        var track = await MusicModule._audioService.GetTrackAsync(query, SearchMode.YouTube);
-        var response = await MusicModule._audioService.LoadTracksAsync(query, SearchMode.YouTube);
-
-        if (track == null)
+        if (query.Contains("list="))
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีผลการค้นหา", Color.Gold));
-            return;
-        }
-
-        await player.SetVolumeAsync(0.3f);
-
-        if (response.Tracks.Length > 1)
-        {
+            var response = await MusicModule._audioService.LoadTracksAsync(query, SearchMode.YouTube);
+            
             List<LavalinkTrack> playlist = response.Tracks.ToList();
             
+            await player.SetVolumeAsync(0.3f);
 
             for (int i = 0; i < playlist.Count; i++)
             {
@@ -43,9 +38,17 @@ public partial class MusicCommand
 
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
                 $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue));
-
         }
-        
+
+        var track = await MusicModule._audioService.GetTrackAsync(query, SearchMode.YouTube);
+
+        if (track == null)
+        {
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีผลการค้นหา", Color.Gold));
+            return;
+        }
+
+        await player.SetVolumeAsync(0.3f);
 
         var position = await player.PlayAsync(track, enqueue: true);
 

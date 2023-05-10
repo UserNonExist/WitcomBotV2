@@ -1,4 +1,6 @@
-﻿using Discord.Interactions;
+﻿using System.Net;
+using System.Net.Security;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Discord.Commands;
 using Discord;
@@ -8,6 +10,7 @@ using Lavalink4NET.DiscordNet;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI_API;
 using WitcomBotV2.Command;
+using WitcomBotV2.Modal;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
@@ -18,9 +21,10 @@ public class Bot
     private static DiscordShardedClient _client;
     private SocketGuild? _guild;
 
-    public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == 979024475729305630);
+    public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == Program.Config.GuildId);
     public static DiscordShardedClient Client => _client ??= new DiscordShardedClient(new DiscordSocketConfig
-        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = 2});
+        { AlwaysDownloadUsers = true, MessageCacheSize = 10000});
+    //Dont forget to change!!
 
     public InteractionService InteractionService { get; private set; } = null!;
     public SlashCommandHandler SlashCommandHandler { get; private set; } = null!;
@@ -48,6 +52,7 @@ public class Bot
             return;
         }
         
+
         Log.Debug(nameof(Init), "Bot token validated.");
         
         Log.Debug(nameof(Init), "Initializing Text Commands..");
@@ -64,12 +69,15 @@ public class Bot
         
         Log.Debug(nameof(Init), "Setting up message handlers..");
         Client.MessageReceived += PingTriggers.HandleMessage;
+        
+        Log.Debug(nameof(Init), "Setting up interaction handlers..");
+        //Client.ButtonExecuted += MusicModule.HandleButton;
 
         Log.Debug(nameof(Init), "Installing Slash commands..");
         await SlashCommandHandler.InstallCommandAsync();
 
 
-        Client.ShardReady += async async =>
+        Client.ShardReady += async _ =>
         {
             Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
@@ -79,10 +87,11 @@ public class Bot
             await MusicModule.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
-            int slashCommandsRegistered = (await InteractionService.RegisterCommandsToGuildAsync(Guild.Id)).Count;
+            int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;
 
             Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
             Log.Debug(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
+            Log.Debug(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
         };
         
         
