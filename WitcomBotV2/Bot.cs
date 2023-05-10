@@ -71,7 +71,6 @@ public class Bot
         Client.MessageReceived += PingTriggers.HandleMessage;
         
         Log.Debug(nameof(Init), "Setting up interaction handlers..");
-        //Client.ButtonExecuted += MusicModule.HandleButton;
 
         Log.Debug(nameof(Init), "Installing Slash commands..");
         await SlashCommandHandler.InstallCommandAsync();
@@ -92,7 +91,7 @@ public class Bot
             Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
             Log.Debug(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
             Log.Debug(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
-            Log.Info(nameof(Init), $"This is shard {_.ShardId} of {Client.Shards.Count} shards.");
+            Log.Info(nameof(Init), $"This is shard {_.ShardId+1} of {Client.Shards.Count} shards.");
         };
         
         

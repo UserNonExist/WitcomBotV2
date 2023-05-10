@@ -103,33 +103,4 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         
         return result;
     }
-    
-    /*public static async Task HandleButton(SocketMessageComponent component)
-    {
-        Log.Debug(nameof(HandleButton), $"Handling button {component.Data.CustomId} from {component.User.Username}#{component.User.Discriminator} ({component.User.Id})");
-        
-        if (component.Data.CustomId == Modal.MusicModal.PreviousButton.CustomId)
-        {
-            var message = await component.Channel.GetMessageAsync(component.Message.Id);
-            foreach (var content in _pages)
-            {
-                if (message.Interaction != content.Key.Interaction)
-                {
-                    continue;
-                }
-                
-                int index = _pages[content.Key].IndexOf(message.Embeds.);
-                
-                if (index == 0)
-                {
-                    await component.RespondAsync("ไม่มีหน้าก่อนหน้านี้แล้ว", ephemeral: true);
-                    return;
-                }
-            }
-            
-            
-        }
-    }
-    
-    public static Dictionary<RestInteractionMessage, List<Embed>> _pages = new();*/
 }
