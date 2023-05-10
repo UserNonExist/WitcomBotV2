@@ -9,7 +9,7 @@ using Group = Discord.Interactions.GroupAttribute;
 using Summary = Discord.Interactions.SummaryAttribute;
 
 [Group("pt", "คำสั่งจัดการกับ ping triggers.")]
-public partial class TriggerCommands : InteractionModuleBase<SocketInteractionContext>
+public partial class TriggerCommands : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("add", "เพิ่มข้อความ ping trigger.")]
     public async Task AddPingTrigger([Summary("Message", "ข้อความที่จะส่ง")] [Remainder] string message)

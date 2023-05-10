@@ -19,7 +19,7 @@ public partial class MusicCommand
         
         if (player.Queue.IsEmpty)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Red));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Red), ephemeral: true);
         }
         
         player.Queue.Shuffle();

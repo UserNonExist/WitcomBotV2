@@ -38,6 +38,7 @@ public partial class MusicCommand
 
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
                 $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue));
+            return;
         }
 
         var track = await MusicModule._audioService.GetTrackAsync(query, SearchMode.YouTube);

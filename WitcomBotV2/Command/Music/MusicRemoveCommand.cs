@@ -19,12 +19,12 @@ public partial class MusicCommand
         
         if (player.Queue.IsEmpty)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Red));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Red), ephemeral: true);
         }
         
         if (trackid > player.Queue.Count || trackid < 1)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีไอดีเพลงนี้ในคิว", Color.Red));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีไอดีเพลงนี้ในคิว", Color.Red), ephemeral: true);
         }
         
         var track = player.Queue.Tracks[trackid - 1];

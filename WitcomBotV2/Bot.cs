@@ -71,6 +71,7 @@ public class Bot
         Client.MessageReceived += PingTriggers.HandleMessage;
         
         Log.Debug(nameof(Init), "Setting up interaction handlers..");
+        
 
         Log.Debug(nameof(Init), "Installing Slash commands..");
         await SlashCommandHandler.InstallCommandAsync();
@@ -98,7 +99,7 @@ public class Bot
         Log.Debug(nameof(Init), "Logging in...");
         await Client.LoginAsync(TokenType.Bot, Program.Config.BotToken);
         await Client.StartAsync();
-        _ = Task.Run(() => Client.SetGameAsync("Counter Strike 2", null, ActivityType.Watching));
+        _ = Task.Run(() => Client.SetGameAsync("INTERNET YAMERO", "https://www.youtube.com/watch?v=51GIxXFKbzk", ActivityType.Streaming));
         Log.Debug(nameof(Init), $"Logged in");
 
         await Task.Delay(-1);

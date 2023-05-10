@@ -22,7 +22,7 @@ public partial class MusicCommand
         if (player.Queue.IsEmpty)
         {
             await RespondAsync(
-                embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Purple));
+                embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Red), ephemeral: true);
             return;
         }
         
@@ -52,12 +52,12 @@ public partial class MusicCommand
         foreach (var track in player.Queue.Tracks)
         {
             count += 1;
-            embedBuilder.AddField($"{count}. {track.Title}", track.Uri);
+            embedBuilder.AddField($"{count}. {track.Title} - {track.Author}", track.Uri);
             
             if (count % 15 == 0)
             {
                 //await ReplyAsync(embed: embedBuilder.Build(), components: components);
-                embedBuilder.WithDescription($"Page {page} of {totalpage}");
+                embedBuilder.WithDescription($"หน้าที่ {page} จาก {totalpage}");
                 embeds.Add(embedBuilder);
 
 
@@ -70,7 +70,7 @@ public partial class MusicCommand
             }
         }
         
-        embedBuilder.WithDescription($"Page {page} of {totalpage}");
+        embedBuilder.WithDescription($"หน้าที่ {page} จาก {totalpage}");
         embeds.Add(embedBuilder);
         
         if (page > totalpage || page < 1)

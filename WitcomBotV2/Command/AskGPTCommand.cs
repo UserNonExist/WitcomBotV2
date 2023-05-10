@@ -20,7 +20,7 @@ public class AskGPTCommand : InteractionModuleBase<ShardedInteractionContext>
         }
         catch (Exception e)
         {
-            await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.ToString());
+            await RespondAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.Message));
         }
     }
 }
