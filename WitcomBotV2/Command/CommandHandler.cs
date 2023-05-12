@@ -11,10 +11,10 @@ using WitcomBotV2.TypeReaders;
 
 public class CommandHandler
 {
-    private readonly DiscordSocketClient client;
+    private readonly DiscordShardedClient client;
     private readonly CommandService service;
 
-    public CommandHandler(DiscordSocketClient client, CommandService service)
+    public CommandHandler(DiscordShardedClient client, CommandService service)
     {
         this.client = client;
         this.service = service;
@@ -37,7 +37,7 @@ public class CommandHandler
               msg.HasMentionPrefix(client.CurrentUser, ref argPos)) || msg.Author.IsBot)
             return;
 
-        SocketCommandContext context = new(client, msg);
+        ShardedCommandContext context = new(client, msg);
 
         try
         {

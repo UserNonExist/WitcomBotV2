@@ -9,7 +9,7 @@ using Discord.Interactions;
 using Group = Discord.Interactions.GroupAttribute;
 using Summary = Discord.Interactions.SummaryAttribute;
 
-public class HelpCommand : InteractionModuleBase<SocketInteractionContext>
+public class HelpCommand : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("help", "บอกคำสั่งทั้งหมด")]
     public async Task Help()

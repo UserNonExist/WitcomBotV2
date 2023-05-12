@@ -7,11 +7,11 @@ namespace WitcomBotV2.Command.Music;
 
 public partial class MusicCommand
 {
-    [SlashCommand("clear", "ล้างคิวเพลง", runMode: RunMode.Async)]
-    public async Task Clear()
+    [SlashCommand("shuffle", "สลับเพลงในคิว", runMode: RunMode.Async)]
+    public async Task Shuffle()
     {
         var player = await MusicModule.GetPlayerAsync(true, Context);
-
+        
         if (player == null)
         {
             return;
@@ -21,8 +21,8 @@ public partial class MusicCommand
         {
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว", Color.Red), ephemeral: true);
         }
-
-        player.Queue.Clear();
-        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ล้างคิวเพลงแล้ว", Color.Blue));
+        
+        player.Queue.Shuffle();
+        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "สลับเพลงในคิวแล้ว", Color.Blue));
     }
 }

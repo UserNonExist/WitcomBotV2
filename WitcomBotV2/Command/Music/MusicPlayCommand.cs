@@ -1,5 +1,8 @@
-﻿using Discord;
+﻿using System.Net;
+using System.Net.Security;
+using Discord;
 using Discord.Interactions;
+using Discord.WebSocket;
 using Lavalink4NET.Player;
 using Lavalink4NET.Rest;
 using WitcomBotV2.Module;
@@ -9,6 +12,7 @@ namespace WitcomBotV2.Command.Music;
 
 public partial class MusicCommand
 {
+    [DefaultMemberPermissions(GuildPermission.Speak | GuildPermission.Connect | GuildPermission.SendMessages)]
     [SlashCommand("play", "เล่นเพลง", runMode: RunMode.Async)]
     public async Task Play(string query)
     {
@@ -19,8 +23,32 @@ public partial class MusicCommand
             return;
         }
 
+        if (query.Contains("list=") && !query.Contains("watch?v="))
+        {
+            var response = await MusicModule._audioService.LoadTracksAsync(query, SearchMode.YouTube);
+            
+            List<LavalinkTrack> playlist = response.Tracks.ToList();
+            
+            await player.SetVolumeAsync(0.25f);
+
+            for (int i = 0; i < playlist.Count; i++)
+            {
+                LavalinkTrack playlistTrack = playlist[i];
+                
+                playlistTrack.Context = new TrackContext
+                {
+                    Requester = Context.User
+                };
+                
+                await player.PlayAsync(playlistTrack, enqueue: true);
+            }
+
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
+                $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue));
+            return;
+        }
+
         var track = await MusicModule._audioService.GetTrackAsync(query, SearchMode.YouTube);
-        var response = await MusicModule._audioService.LoadTracksAsync(query, SearchMode.YouTube);
 
         if (track == null)
         {
@@ -28,24 +56,12 @@ public partial class MusicCommand
             return;
         }
 
-        await player.SetVolumeAsync(0.3f);
-
-        if (response.Tracks.Length > 1)
-        {
-            List<LavalinkTrack> playlist = response.Tracks.ToList();
-            
-
-            for (int i = 0; i < playlist.Count; i++)
-            {
-                LavalinkTrack playlistTrack = playlist[i];
-                await player.PlayAsync(playlistTrack, enqueue: true);
-            }
-
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
-                $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue));
-
-        }
+        await player.SetVolumeAsync(0.25f);
         
+        track.Context = new TrackContext
+        {
+            Requester = Context.User
+        };
 
         var position = await player.PlayAsync(track, enqueue: true);
 
@@ -57,5 +73,10 @@ public partial class MusicCommand
         {
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue));
         }
+    }
+
+    public sealed class TrackContext
+    {
+        public SocketUser Requester { get; set; }
     }
 }

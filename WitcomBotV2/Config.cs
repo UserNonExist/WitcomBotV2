@@ -15,4 +15,6 @@ public class Config
     public string LLWebSocketUri { get; set; }
     public string LLPassword { get; set; }
     public string UnloadPassword { get; set; }
+    public int ShardId { get; set; }
+    public int TotalShards { get; set; }
 }

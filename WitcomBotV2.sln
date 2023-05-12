@@ -12,5 +12,6 @@ Global
 		{EEC37EAE-03C9-4134-B07A-44917376ABD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEC37EAE-03C9-4134-B07A-44917376ABD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEC37EAE-03C9-4134-B07A-44917376ABD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEC37EAE-03C9-4134-B07A-44917376ABD8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

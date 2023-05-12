@@ -6,8 +6,9 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command.PingTriggers;
 
-public class SendCommand : InteractionModuleBase<SocketInteractionContext>
+public class SendCommand : InteractionModuleBase<ShardedInteractionContext>
 {
+    [EnabledInDm(false)]
     [SlashCommand("send", "ส่งข้อความไปหาคนอื่น")]
     public async Task Send([Discord.Interactions.Summary("User", "ผู้ใช้")] SocketUser user, [Discord.Interactions.Summary("Message", "ข้อความ")] [Remainder] string message)
     {

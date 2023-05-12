@@ -6,8 +6,9 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command;
 
-public class AskGPTCommand : InteractionModuleBase<SocketInteractionContext>
+public class AskGPTCommand : InteractionModuleBase<ShardedInteractionContext>
 {
+    [DefaultMemberPermissions(GuildPermission.SendMessages)]
     [SlashCommand("askgpt", "ถาม GPT-3")]
     public async Task AskGPT([Discord.Interactions.Summary("Question", "คำถาม")] [Remainder] string question)
     {
@@ -19,7 +20,7 @@ public class AskGPTCommand : InteractionModuleBase<SocketInteractionContext>
         }
         catch (Exception e)
         {
-            await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.ToString());
+            await RespondAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.Message));
         }
     }
 }

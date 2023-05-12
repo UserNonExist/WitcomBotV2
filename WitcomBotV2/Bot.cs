@@ -1,4 +1,6 @@
-﻿using Discord.Interactions;
+﻿using System.Net;
+using System.Net.Security;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Discord.Commands;
 using Discord;
@@ -8,6 +10,7 @@ using Lavalink4NET.DiscordNet;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI_API;
 using WitcomBotV2.Command;
+using WitcomBotV2.Modal;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
@@ -15,12 +18,13 @@ namespace WitcomBotV2;
 
 public class Bot
 {
-    private static DiscordSocketClient? _client;
+    private static DiscordShardedClient _client;
     private SocketGuild? _guild;
 
-    public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == 979024475729305630);
-    public static DiscordSocketClient Client => _client ??= new DiscordSocketClient(new DiscordSocketConfig
-        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = null, ShardId = 1});
+    public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == Program.Config.GuildId);
+    public static DiscordShardedClient Client => _client ??= new DiscordShardedClient(new DiscordSocketConfig
+        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = Program.Config.TotalShards});
+    //Dont forget to change!!
 
     public InteractionService InteractionService { get; private set; } = null!;
     public SlashCommandHandler SlashCommandHandler { get; private set; } = null!;
@@ -48,6 +52,7 @@ public class Bot
             return;
         }
         
+
         Log.Debug(nameof(Init), "Bot token validated.");
         
         Log.Debug(nameof(Init), "Initializing Text Commands..");
@@ -64,13 +69,17 @@ public class Bot
         
         Log.Debug(nameof(Init), "Setting up message handlers..");
         Client.MessageReceived += PingTriggers.HandleMessage;
+        
+        Log.Debug(nameof(Init), "Setting up interaction handlers..");
+        
 
         Log.Debug(nameof(Init), "Installing Slash commands..");
         await SlashCommandHandler.InstallCommandAsync();
-        
-        
-        Client.Ready += async () =>
-        { Log.Debug(nameof(Init), "Initializing Database..");
+
+
+        Client.ShardReady += async _ =>
+        {
+            Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
             Log.Debug(nameof(Init), "Initializing OpenAIAPI..");
             await GPTModule.Init();
@@ -78,17 +87,19 @@ public class Bot
             await MusicModule.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
-            int slashCommandsRegistered = (await InteractionService.RegisterCommandsToGuildAsync(Guild.Id)).Count;
+            int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;
 
             Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
             Log.Debug(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
+            Log.Debug(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
+            Log.Info(nameof(Init), $"This is shard {_.ShardId+1} of {Client.Shards.Count} shards.");
         };
         
         
         Log.Debug(nameof(Init), "Logging in...");
         await Client.LoginAsync(TokenType.Bot, Program.Config.BotToken);
         await Client.StartAsync();
-        _ = Task.Run(() => Client.SetGameAsync("Counter Strike 2", null, ActivityType.Watching));
+        _ = Task.Run(() => Client.SetGameAsync("INTERNET YAMERO", "https://www.youtube.com/watch?v=51GIxXFKbzk", ActivityType.Streaming));
         Log.Debug(nameof(Init), $"Logged in");
 
         await Task.Delay(-1);

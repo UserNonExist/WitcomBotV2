@@ -6,7 +6,7 @@ using WitcomBotV2.Service;
 namespace WitcomBotV2.Command.Music;
 
 [Group("music", "คำสั่งเกี่ยวกับเพลง")]
-public partial class MusicCommand : InteractionModuleBase<SocketInteractionContext>
+public partial class MusicCommand : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("disconnect", "ออกจากห้องเสียง", runMode: RunMode.Async)]
     public async Task Disconnect()

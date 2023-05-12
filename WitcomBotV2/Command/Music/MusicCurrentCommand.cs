@@ -19,18 +19,19 @@ public partial class MusicCommand
 
         if (player.CurrentTrack == null)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงที่กำลังเล่นอยู่", Color.Red));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงที่กำลังเล่นอยู่", Color.Red), ephemeral: true);
             return;
         }
         
         var artwork = await MusicModule._artworkService.ResolveAsync(player.CurrentTrack);
+        var context = (TrackContext)player.CurrentTrack.Context!;
 
         var embed = new EmbedBuilder();
         embed.WithTitle("Music");
         embed.WithCurrentTimestamp();
         embed.WithColor(Color.Green);
-        embed.WithDescription($"กำลังเล่นเพลง {player.CurrentTrack.Title} - {player.CurrentTrack.Uri}");
-        embed.WithThumbnailUrl(artwork.ToString());
+        embed.WithDescription($"กำลังเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}\nRequested by: {context.Requester.Mention}\n\n{player.CurrentTrack.Duration}");
+        embed.WithImageUrl(artwork.ToString());
         embed.WithFooter(EmbedBuilderService.FooterText);
         
         await RespondAsync(embed: embed.Build());
