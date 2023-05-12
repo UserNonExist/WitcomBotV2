@@ -27,12 +27,9 @@ public partial class MusicCommand
         {
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีไอดีเพลงนี้ในคิว", Color.Red), ephemeral: true);
         }
-
-        for (var trackIndex = 0; trackIndex < trackid; trackIndex++)
-        {
-            player.SkipAsync(trackid);
-        }
         
+        player.SkipAsync(trackid);
+
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"ข้ามไปยังเพลง {player.CurrentTrack.Title} แล้ว", Color.Blue));
     }
 }
