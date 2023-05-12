@@ -24,13 +24,13 @@ public partial class MusicCommand
         }
         
         var artwork = await MusicModule._artworkService.ResolveAsync(player.CurrentTrack);
+        var context = (TrackContext)player.CurrentTrack.Context!;
 
         var embed = new EmbedBuilder();
         embed.WithTitle("Music");
         embed.WithCurrentTimestamp();
         embed.WithColor(Color.Green);
-        embed.WithDescription($"กำลังเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri})\n\n{player.CurrentTrack.Position}/{player.CurrentTrack.Duration}");
-        embed.WithThumbnailUrl(Context.User.GetAvatarUrl());
+        embed.WithDescription($"กำลังเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}\nRequested by: {context.Requester.Mention}\n\n{player.CurrentTrack.Duration}");
         embed.WithImageUrl(artwork.ToString());
         embed.WithFooter(EmbedBuilderService.FooterText);
         

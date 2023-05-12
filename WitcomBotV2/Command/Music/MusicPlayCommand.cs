@@ -2,6 +2,7 @@
 using System.Net.Security;
 using Discord;
 using Discord.Interactions;
+using Discord.WebSocket;
 using Lavalink4NET.Player;
 using Lavalink4NET.Rest;
 using WitcomBotV2.Module;
@@ -22,7 +23,7 @@ public partial class MusicCommand
             return;
         }
 
-        if (query.Contains("list="))
+        if (query.Contains("list=") && !query.Contains("watch?v="))
         {
             var response = await MusicModule._audioService.LoadTracksAsync(query, SearchMode.YouTube);
             
@@ -33,6 +34,12 @@ public partial class MusicCommand
             for (int i = 0; i < playlist.Count; i++)
             {
                 LavalinkTrack playlistTrack = playlist[i];
+                
+                playlistTrack.Context = new TrackContext
+                {
+                    Requester = Context.User
+                };
+                
                 await player.PlayAsync(playlistTrack, enqueue: true);
             }
 
@@ -50,6 +57,11 @@ public partial class MusicCommand
         }
 
         await player.SetVolumeAsync(0.25f);
+        
+        track.Context = new TrackContext
+        {
+            Requester = Context.User
+        };
 
         var position = await player.PlayAsync(track, enqueue: true);
 
@@ -61,5 +73,10 @@ public partial class MusicCommand
         {
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue));
         }
+    }
+
+    public sealed class TrackContext
+    {
+        public SocketUser Requester { get; set; }
     }
 }

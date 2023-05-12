@@ -98,9 +98,9 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
 
         var result = await _audioService.JoinAsync<VoteLavalinkPlayer>(user.Guild.Id, user.VoiceChannel.Id);
         
-        await result.SetVolumeAsync(0.3f);
         new InactivityTrackingService(_audioService, _discordClientWrapper, _Inactivityoptions);
         
         return result;
     }
+    
 }
