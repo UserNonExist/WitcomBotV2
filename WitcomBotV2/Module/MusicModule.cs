@@ -59,6 +59,10 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         }
 
         _artworkService = new ArtworkService();
+        _audioService.TrackException += async (sender, args) =>
+        {
+            Log.Error(nameof(Init), $"Lavalink exception: {args.ErrorMessage}");
+        };
         
         var service = new InactivityTrackingService(_audioService, 
             _discordClientWrapper,
