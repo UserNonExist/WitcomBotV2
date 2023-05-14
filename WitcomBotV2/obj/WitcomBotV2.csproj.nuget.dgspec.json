@@ -86,10 +86,6 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
-            "Notion.Net": {
-              "target": "Package",
-              "version": "[4.1.0, )"
-            },
             "OpenAI": {
               "target": "Package",
               "version": "[1.7.2, )"

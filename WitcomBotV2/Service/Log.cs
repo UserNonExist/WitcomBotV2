@@ -10,8 +10,8 @@ public class Log
         return Task.CompletedTask;
     }
 
-    public static void Info(string source, object msg) => Send(new LogMessage(LogSeverity.Info,
-        source, msg.ToString()));
+    public static void Info(string source, object msg) => 
+        Send(new LogMessage(LogSeverity.Info, source, msg.ToString()));
 
     public static void Debug(string source, object msg)
     {
@@ -19,7 +19,8 @@ public class Log
             Send(new LogMessage(LogSeverity.Debug, source, msg.ToString()));
     }
         
-    public static void Error(string source, object msg) => Send(new LogMessage(LogSeverity.Error, source, msg.ToString()));
+    public static void Error(string source, object msg) => 
+        Send(new LogMessage(LogSeverity.Error, source, msg.ToString()));
 
     public static void Warn(string source, object msg) =>
         Send(new LogMessage(LogSeverity.Warning, source, msg.ToString()));
