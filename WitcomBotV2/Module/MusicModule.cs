@@ -17,11 +17,11 @@ namespace WitcomBotV2.Module;
 
 public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
 {
-    public static IAudioService _audioService;
-    public static ArtworkService _artworkService;
-    public static DiscordClientWrapper _discordClientWrapper;
+    public static IAudioService AudioService;
+    public static ArtworkService ArtworkService;
+    public static DiscordClientWrapper DiscordClientWrapper;
     
-    public static InactivityTrackingOptions _Inactivityoptions = new InactivityTrackingOptions
+    private static readonly InactivityTrackingOptions Inactivityoptions = new InactivityTrackingOptions
     {
         DisconnectDelay = TimeSpan.FromMinutes(2),
         PollInterval = TimeSpan.FromMinutes(1),
@@ -30,14 +30,14 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
     
     public static async Task Init()
     {
-        _discordClientWrapper = new DiscordClientWrapper(Bot.Client);
+        DiscordClientWrapper = new DiscordClientWrapper(Bot.Client);
         
-        _audioService = new LavalinkNode(new LavalinkNodeOptions
+        AudioService = new LavalinkNode(new LavalinkNodeOptions
                 {
                     RestUri = Program.Config.LLRESTUri,
                     WebSocketUri = Program.Config.LLWebSocketUri,
                     Password = Program.Config.LLPassword
-                }, _discordClientWrapper);
+                }, DiscordClientWrapper);
         
         
         Log.Debug(nameof(Init), "Setting up Lavalink...");
@@ -48,7 +48,7 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         {
             try
             {
-                await _audioService.InitializeAsync();
+                await AudioService.InitializeAsync();
                 connected = true;
             }
             catch (Exception e)
@@ -58,14 +58,14 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
             await Task.Delay(5000);
         }
 
-        _artworkService = new ArtworkService();
-        _audioService.TrackException += async (sender, args) =>
+        ArtworkService = new ArtworkService();
+        AudioService.TrackException += async (sender, args) =>
         {
             Log.Error(nameof(Init), $"Lavalink exception: {args.ErrorMessage}");
         };
         
-        var service = new InactivityTrackingService(_audioService, 
-            _discordClientWrapper,
+        var service = new InactivityTrackingService(AudioService, 
+            DiscordClientWrapper,
             new InactivityTrackingOptions());
         
         
@@ -77,7 +77,7 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
 
     public static async ValueTask<VoteLavalinkPlayer> GetPlayerAsync(bool connectToVoiceChannel = true, ShardedInteractionContext context = null)
     {
-        var player = _audioService.GetPlayer<VoteLavalinkPlayer>(context.Guild.Id);
+        var player = AudioService.GetPlayer<VoteLavalinkPlayer>(context.Guild.Id);
 
         if (player != null && player.State != PlayerState.NotConnected
                            && player.State != PlayerState.Destroyed)
@@ -100,9 +100,9 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         }
         
 
-        var result = await _audioService.JoinAsync<VoteLavalinkPlayer>(user.Guild.Id, user.VoiceChannel.Id);
+        var result = await AudioService.JoinAsync<VoteLavalinkPlayer>(user.Guild.Id, user.VoiceChannel.Id);
         
-        new InactivityTrackingService(_audioService, _discordClientWrapper, _Inactivityoptions);
+        new InactivityTrackingService(AudioService, DiscordClientWrapper, Inactivityoptions);
         
         return result;
     }

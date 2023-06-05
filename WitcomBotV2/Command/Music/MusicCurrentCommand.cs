@@ -23,7 +23,7 @@ public partial class MusicCommand
             return;
         }
         
-        var artwork = await MusicModule._artworkService.ResolveAsync(player.CurrentTrack);
+        var artwork = await MusicModule.ArtworkService.ResolveAsync(player.CurrentTrack);
         var context = (TrackContext)player.CurrentTrack.Context!;
 
         var embed = new EmbedBuilder();

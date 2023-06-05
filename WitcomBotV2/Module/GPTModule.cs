@@ -17,11 +17,7 @@ public class GPTModule
     {
         var conversation = _openAiApi.Chat.CreateConversation();
         conversation.AppendUserInput(question);
-        string txt = "I broke smth, shit";
-        
-        string response = await conversation.GetResponseFromChatbotAsync();
-        Log.Debug(nameof(AskGPT3), response);
-        txt = $"Question: {question}\n\nAnswer: " + response;
-        return txt;
+
+        return $"Question: {question}\n\nAnswer: " + await conversation.GetResponseFromChatbotAsync();;
     }
 }

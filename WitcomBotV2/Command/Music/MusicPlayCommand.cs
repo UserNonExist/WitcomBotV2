@@ -25,7 +25,7 @@ public partial class MusicCommand
 
         if (query.Contains("list=") && !query.Contains("watch?v="))
         {
-            var response = await MusicModule._audioService.LoadTracksAsync(query, SearchMode.YouTube);
+            var response = await MusicModule.AudioService.LoadTracksAsync(query, SearchMode.YouTube);
             
             List<LavalinkTrack> playlist = response.Tracks.ToList();
             
@@ -48,7 +48,7 @@ public partial class MusicCommand
             return;
         }
 
-        var track = await MusicModule._audioService.GetTrackAsync(query, SearchMode.YouTube);
+        var track = await MusicModule.AudioService.GetTrackAsync(query, SearchMode.YouTube);
 
         if (track == null)
         {

@@ -12,15 +12,14 @@ public class AskGPTCommand : InteractionModuleBase<ShardedInteractionContext>
     [SlashCommand("askgpt", "ถาม GPT-3")]
     public async Task AskGPT([Discord.Interactions.Summary("Question", "คำถาม")] [Remainder] string question)
     {
-        string txt = GPTModule.AskGPT3(question).Result;
+        await DeferAsync();
         try
         {
-            await RespondAsync(
-                embed: await EmbedBuilderService.CreateBasicEmbed("GPT-3", txt, Color.Blue));
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("GPT-3", GPTModule.AskGPT3(question).Result, Color.Blue));
         }
         catch (Exception e)
         {
-            await RespondAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.Message));
+            await FollowupAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, e.Message));
         }
     }
 }
