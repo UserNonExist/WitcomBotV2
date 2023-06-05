@@ -6,6 +6,7 @@ using Lavalink4NET;
 using Lavalink4NET.Artwork;
 using Lavalink4NET.Cluster;
 using Lavalink4NET.DiscordNet;
+using Lavalink4NET.Events;
 using Lavalink4NET.Player;
 using Lavalink4NET.Rest;
 using Lavalink4NET.Tracking;
@@ -72,6 +73,9 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         
         service.BeginTracking();
 
+        AudioService.TrackStarted += OnTrackStarted;
+        AudioService.TrackException += OnTrackException;
+
         Log.Info(nameof(Init), "Lavalink connected.");
     }
 
@@ -106,5 +110,52 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         
         return result;
     }
-    
+
+
+    public static async Task OnTrackStarted(object obj, TrackStartedEventArgs args)
+    {
+        var player = args.Player as VoteLavalinkPlayer;
+
+        if (player == null)
+            return;
+
+        var track = player.CurrentTrack;
+        var artwork = ArtworkService.ResolveAsync(track);
+        var context = (TrackContext)track.Context!;
+
+        var embed = new EmbedBuilder();
+        embed.WithTitle("Music");
+        embed.WithCurrentTimestamp();
+        embed.WithColor(Color.Green);
+        embed.WithDescription($"เริ่มเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}\nRequested by: {context.Requester.Mention}");
+        embed.WithImageUrl(artwork.ToString());
+        embed.WithFooter(EmbedBuilderService.FooterText);
+
+        var channel = context.Channel;
+        var guild = context.Guild;
+
+        await guild.GetTextChannel(channel.Id).SendMessageAsync(embed: embed.Build());
+    }
+
+    public static async Task OnTrackException(object obj, TrackExceptionEventArgs args)
+    {
+        var player = args.Player as VoteLavalinkPlayer;
+        
+        if (player == null)
+            return;
+
+        var track = player.CurrentTrack;
+        var context = (TrackContext)track.Context!;
+        var channel = context.Channel;
+        var guild = context.Guild;
+        
+        var embed = new EmbedBuilder();
+        embed.WithTitle("Music");
+        embed.WithCurrentTimestamp();
+        embed.WithColor(Color.Red);
+        embed.WithDescription($"เกิดข้อผิดพลาดในการเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}");
+        embed.WithFooter(EmbedBuilderService.FooterText);
+        
+        await guild.GetTextChannel(channel.Id).SendMessageAsync(embed: embed.Build());
+    }
 }

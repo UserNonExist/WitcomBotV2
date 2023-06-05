@@ -37,7 +37,9 @@ public partial class MusicCommand
                 
                 playlistTrack.Context = new TrackContext
                 {
-                    Requester = Context.User
+                    Requester = Context.User,
+                    Guild = Context.Guild,
+                    Channel = Context.Channel as SocketTextChannel
                 };
                 
                 await player.PlayAsync(playlistTrack, enqueue: true);
@@ -60,7 +62,9 @@ public partial class MusicCommand
         
         track.Context = new TrackContext
         {
-            Requester = Context.User
+            Requester = Context.User,
+            Guild = Context.Guild,
+            Channel = Context.Channel as SocketTextChannel
         };
 
         var position = await player.PlayAsync(track, enqueue: true);
@@ -73,10 +77,5 @@ public partial class MusicCommand
         {
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue));
         }
-    }
-
-    public sealed class TrackContext
-    {
-        public SocketUser Requester { get; set; }
     }
 }
