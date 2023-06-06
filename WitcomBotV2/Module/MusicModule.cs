@@ -127,7 +127,7 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         embed.WithTitle("Music");
         embed.WithCurrentTimestamp();
         embed.WithColor(Color.Green);
-        embed.WithDescription($"เริ่มเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}\nRequested by: {context.Requester.Mention}");
+        embed.WithDescription($"เริ่มเล่นเพลง \n[{track.Title}]({track.Uri}) - {track.Author}\nRequested by: {context.Requester.Mention}");
         embed.WithImageUrl(artwork.ToString());
         embed.WithFooter(EmbedBuilderService.FooterText);
 
@@ -153,7 +153,7 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         embed.WithTitle("Music");
         embed.WithCurrentTimestamp();
         embed.WithColor(Color.Red);
-        embed.WithDescription($"เกิดข้อผิดพลาดในการเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}");
+        embed.WithDescription($"เกิดข้อผิดพลาดในการเล่นเพลง \n[{track.Title}]({track.Uri}) - {track.Author}");
         embed.WithFooter(EmbedBuilderService.FooterText);
         
         await guild.GetTextChannel(channel.Id).SendMessageAsync(embed: embed.Build());

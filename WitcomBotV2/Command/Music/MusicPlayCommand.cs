@@ -46,7 +46,7 @@ public partial class MusicCommand
             }
 
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
-                $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue));
+                $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue), ephemeral: true);
             return;
         }
 
@@ -71,11 +71,11 @@ public partial class MusicCommand
 
         if (position == 0)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"กำลังเล่น {track.Title} - {track.Source}", Color.Blue));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"กำลังเล่น {track.Title} - {track.Source}", Color.Blue), ephemeral: true);
         }
         else
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue), ephemeral: true);
         }
     }
 }
