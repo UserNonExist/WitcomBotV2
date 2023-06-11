@@ -26,15 +26,20 @@ public class Program
     
     private static Config GetConfig()
     {
+        
         if (!File.Exists(KCfile))
         {
             Console.WriteLine("Config file not found. Creating one...");
             var config = new Config();
-            File.WriteAllText(KCfile, JsonConvert.SerializeObject(config, Formatting.Indented));
+            File.WriteAllText(KCfile, JsonConvert.SerializeObject(config, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
             Console.WriteLine("Config file created. Please fill in the token and restart the bot.");
             Console.ReadLine();
             Environment.Exit(0);
         }
+
         return JsonConvert.DeserializeObject<Config>(File.ReadAllText(KCfile));
     }
 }

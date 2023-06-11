@@ -66,7 +66,7 @@ public partial class MusicCommand
                 embedBuilder.WithColor(Color.Purple);
                 embedBuilder.WithCurrentTimestamp();
                 embedBuilder.WithTitle("Queue Contd.");
-                embedBuilder.WithDescription($"Page {page} of {totalpage}");
+                embedBuilder.WithDescription($"หน้าที่ {page} จาก {totalpage}");
                 embedBuilder.WithFooter(EmbedBuilderService.FooterText);
             }
         }

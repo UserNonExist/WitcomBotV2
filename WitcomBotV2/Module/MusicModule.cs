@@ -32,13 +32,24 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
     public static async Task Init()
     {
         DiscordClientWrapper = new DiscordClientWrapper(Bot.Client);
+        List<LavalinkNodeOptions> nodes = new List<LavalinkNodeOptions>();
         
-        AudioService = new LavalinkNode(new LavalinkNodeOptions
-                {
-                    RestUri = Program.Config.LLRESTUri,
-                    WebSocketUri = Program.Config.LLWebSocketUri,
-                    Password = Program.Config.LLPassword
-                }, DiscordClientWrapper);
+        foreach (var nodeList in Program.Config.LavalinkNodeList)
+        {
+            nodes.Add(new LavalinkNodeOptions
+            {
+                RestUri = nodeList.RestUri,
+                Password = nodeList.Password,
+                WebSocketUri = nodeList.WebSocketUri
+            });
+        }
+        
+        AudioService = new LavalinkCluster(new LavalinkClusterOptions
+        {
+            Nodes = nodes,
+            LoadBalacingStrategy = LoadBalancingStrategies.LoadStrategy,
+            StayOnline = true
+        }, DiscordClientWrapper);
         
         
         Log.Debug(nameof(Init), "Setting up Lavalink...");
@@ -54,7 +65,7 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
             }
             catch (Exception e)
             {
-                Log.Error(nameof(Init), $"Lavalink failed to connect. {e}");
+                Log.Error(nameof(Init), $"Lavalink failed to connect. Retrying...");
             }
             await Task.Delay(5000);
         }

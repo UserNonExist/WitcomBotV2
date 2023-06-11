@@ -1,4 +1,8 @@
-﻿namespace WitcomBotV2;
+﻿using Lavalink4NET;
+using Lavalink4NET.Cluster;
+using WitcomBotV2.Service;
+
+namespace WitcomBotV2;
 
 public class Config
 {
@@ -12,9 +16,16 @@ public class Config
     public ulong ChannelRentId { get; set; }
     public ulong ChannelRentCatId { get; set; }
     public string OpenAIAPIKey { get; set; }
-    public string LLRESTUri { get; set; }
-    public string LLWebSocketUri { get; set; }
-    public string LLPassword { get; set; }
     public string UnloadPassword { get; set; }
     public int TotalShards { get; set; }
+
+    public List<LavalinkServerOption> LavalinkNodeList { get; set; } = new()
+    {
+        new LavalinkServerOption()
+        {
+        RestUri = "http://localhost:2333",
+        WebSocketUri = "ws://localhost:2333",
+        Password = "youshallnotpass",
+        }
+    };
 }
