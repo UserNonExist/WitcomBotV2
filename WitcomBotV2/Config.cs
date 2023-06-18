@@ -28,4 +28,7 @@ public class Config
         Password = "youshallnotpass",
         }
     };
+    
+    public ulong SecureChatGuildId { get; set; }
+    public ulong SecureChatChannelId { get; set; }
 }

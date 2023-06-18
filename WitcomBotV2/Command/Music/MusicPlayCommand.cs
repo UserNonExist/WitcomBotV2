@@ -50,7 +50,7 @@ public partial class MusicCommand
             return;
         }
 
-        var track = await MusicModule.AudioService.GetTrackAsync(query, SearchMode.YouTube);
+        var track = await MusicModule.AudioService.GetTrackAsync(query, SearchMode.None);
 
         if (track == null)
         {

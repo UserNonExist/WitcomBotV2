@@ -8,7 +8,6 @@ using Discord.Rest;
 using Lavalink4NET;
 using Lavalink4NET.DiscordNet;
 using Microsoft.Extensions.DependencyInjection;
-using OpenAI_API;
 using WitcomBotV2.Command;
 using WitcomBotV2.Modal;
 using WitcomBotV2.Module;
@@ -23,7 +22,7 @@ public class Bot
 
     public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == Program.Config.GuildId);
     public static DiscordShardedClient Client => _client ??= new DiscordShardedClient(new DiscordSocketConfig
-        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, TotalShards = Program.Config.TotalShards});
+        { AlwaysDownloadUsers = true, MessageCacheSize = 10000, GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent});
     //Dont forget to change!!
 
     public InteractionService InteractionService { get; private set; } = null!;
@@ -69,6 +68,7 @@ public class Bot
         
         Log.Debug(nameof(Init), "Setting up message handlers..");
         Client.MessageReceived += PingTriggers.HandleMessage;
+        Client.MessageReceived += SecureChatModule.HandleMessage;
         
         Log.Debug(nameof(Init), "Setting up interaction handlers..");
         
@@ -81,8 +81,6 @@ public class Bot
         {
             Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
-            Log.Debug(nameof(Init), "Initializing OpenAIAPI..");
-            await GPTModule.Init();
             Log.Debug(nameof(Init), "Initializing MusicModule..");
             await MusicModule.Init();
             
