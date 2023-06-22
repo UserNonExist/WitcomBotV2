@@ -27,7 +27,7 @@ public partial class SecureCommand
         {
             
             Module.SecureChatModule.DestroyLobby(Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id));
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "ทำการตักการเชื่อมต่อกับห้องแชท", Color.Red), ephemeral: true);
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "กำลังตัดการเชื่อมต่อ...", Color.Red), ephemeral: true);
             return;
         }
         
