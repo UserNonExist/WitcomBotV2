@@ -13,7 +13,7 @@ public partial class SecureCommand : InteractionModuleBase<ShardedInteractionCon
     [SlashCommand("connect", "เชื่อมต่อกับห้องสนทนาข้ามเซิร์ฟเวอร์")]
     public async Task Connect()
     {
-        if (!Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id).PermissionOverwrites.Any(x => x.TargetId == Context.User.Id && x.TargetType == PermissionTarget.User && x.Permissions.SendMessages == PermValue.Deny))
+        if (Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id).PermissionOverwrites.Any(x => x.TargetId == Context.User.Id && x.TargetType == PermissionTarget.User && x.Permissions.SendMessages == PermValue.Deny))
         {
             await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "คุณไม่สามารถใช้คำสั่งนี้ในห้องนี้ได้", Color.Red), ephemeral: true);
             return;

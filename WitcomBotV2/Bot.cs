@@ -68,8 +68,7 @@ public class Bot
         
         Log.Debug(nameof(Init), "Setting up message handlers..");
         Client.MessageReceived += PingTriggers.HandleMessage;
-        Client.MessageReceived += SecureChatModule.HandleMessage;
-        
+
         Log.Debug(nameof(Init), "Setting up interaction handlers..");
         
 
@@ -83,6 +82,8 @@ public class Bot
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
             Log.Debug(nameof(Init), "Initializing MusicModule..");
             await MusicModule.Init();
+            Log.Debug(nameof(Init), "Initializing SecureChat Module..");
+            await SecureChatModule.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;
@@ -97,7 +98,7 @@ public class Bot
         Log.Debug(nameof(Init), "Logging in...");
         await Client.LoginAsync(TokenType.Bot, Program.Config.BotToken);
         await Client.StartAsync();
-        _ = Task.Run(() => Client.SetGameAsync("INTERNET YAMERO", "https://www.youtube.com/watch?v=51GIxXFKbzk", ActivityType.Streaming));
+        _ = Task.Run(() => Client.SetGameAsync("/help | WitBot"));
         Log.Debug(nameof(Init), $"Logged in");
 
         await Task.Delay(-1);

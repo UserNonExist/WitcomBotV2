@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
 using WitcomBotV2.Service;
 
@@ -59,7 +60,7 @@ public class ChannelRenting
             properties.UserLimit = 12;
             properties.Name = channelName;
             properties.CategoryId = Program.Config.ChannelRentCatId;
-        }, RequestOptions.Default);
+        }, RequestOptions.Default) as IVoiceChannel;
 
         await channel.AddPermissionOverwriteAsync(guild.EveryoneRole,
             new OverwritePermissions(connect: PermValue.Allow));
@@ -69,9 +70,9 @@ public class ChannelRenting
             new OverwritePermissions(connect: PermValue.Allow, manageChannel: PermValue.Allow));
 
         await guildUser.ModifyAsync(x => x.ChannelId = channel.Id);
-        
+
         RentedChannels.Add(user, channel.Id);
-        Log.Debug($"{nameof(ChannelRenting)}.{nameof(HandleUserJoined)}","Created rent channel suscessfully");
+        Log.Debug($"{nameof(ChannelRenting)}.{nameof(HandleUserJoined)}","Created rent channel sucessfully");
     }
 
     private static async Task HandleUserLeft(SocketUser user, SocketVoiceState before, SocketVoiceState after)
@@ -80,7 +81,7 @@ public class ChannelRenting
         {
             await before.VoiceChannel.DeleteAsync();
             RentedChannels.Remove(user);
-            Log.Debug($"{nameof(ChannelRenting)}.{nameof(HandleUserLeft)}","Deleted rent channel suscessfully");
+            Log.Debug($"{nameof(ChannelRenting)}.{nameof(HandleUserLeft)}","Deleted rent channel sucessfully");
         }
     }
 }
