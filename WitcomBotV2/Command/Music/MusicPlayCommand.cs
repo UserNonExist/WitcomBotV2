@@ -49,6 +49,7 @@ public partial class MusicCommand
                 $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue), ephemeral: true);
             return;
         }
+        
 
         var track = await MusicModule.AudioService.GetTrackAsync(query, SearchMode.None);
 

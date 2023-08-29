@@ -52,7 +52,7 @@ public partial class MusicCommand
         foreach (var track in player.Queue.Tracks)
         {
             count += 1;
-            var context = (TrackContext)player.CurrentTrack!.Context!;
+            var context = (TrackContext)track.Context!;
             embedBuilder.AddField($"{count}. {track.Title} - Requester: {context.Requester.Username}", track.Uri);
             
             if (count % 15 == 0)
