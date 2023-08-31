@@ -13,7 +13,7 @@ public class SecureChatModule
     public static async Task Init ()
     {
         Bot.Client.MessageReceived += HandleMessage;
-
+    
         MatchMakingLoop();
     }
     

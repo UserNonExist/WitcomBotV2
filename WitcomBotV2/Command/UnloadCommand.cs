@@ -6,7 +6,7 @@ namespace WitcomBotV2.Command;
 
 public class UnloadCommand : InteractionModuleBase<ShardedInteractionContext>
 {
-    [SlashCommand("unloadslash", "unload slash command, need password")]
+    [SlashCommand("unloadslash", "DNI")]
     public async Task unload_guild_slash(string password)
     {
         if (password != Program.Config.UnloadPassword)

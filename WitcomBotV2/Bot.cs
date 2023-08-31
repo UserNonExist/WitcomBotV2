@@ -82,8 +82,8 @@ public class Bot
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
             Log.Debug(nameof(Init), "Initializing MusicModule..");
             await MusicModule.Init();
-            Log.Debug(nameof(Init), "Initializing SecureChat Module..");
-            await SecureChatModule.Init();
+            //Log.Debug(nameof(Init), "Initializing SecureChat Module..");
+            //await SecureChatModule.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;

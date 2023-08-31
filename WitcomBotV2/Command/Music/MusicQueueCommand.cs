@@ -53,7 +53,7 @@ public partial class MusicCommand
         {
             count += 1;
             var context = (TrackContext)track.Context!;
-            embedBuilder.AddField($"{count}. {track.Title} - Requester: {context.Requester.Username}", track.Uri);
+            embedBuilder.AddField($"{count}. {track.Title} - Requester: {context.Requester.Mention}", track.Uri);
             
             if (count % 15 == 0)
             {
