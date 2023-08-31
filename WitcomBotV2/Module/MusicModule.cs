@@ -78,7 +78,10 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         
         var service = new InactivityTrackingService(AudioService, 
             DiscordClientWrapper,
-            new InactivityTrackingOptions());
+            new InactivityTrackingOptions
+            {
+                DisconnectDelay = TimeSpan.FromSeconds(300),
+            });
         
         
         
