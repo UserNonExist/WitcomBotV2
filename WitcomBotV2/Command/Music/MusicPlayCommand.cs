@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Net.Security;
-using Discord;
+﻿using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
 using Lavalink4NET.Player;
@@ -14,8 +12,10 @@ public partial class MusicCommand
 {
     [DefaultMemberPermissions(GuildPermission.Speak | GuildPermission.Connect | GuildPermission.SendMessages)]
     [SlashCommand("play", "เล่นเพลง", runMode: RunMode.Async)]
-    public async Task Play(string query)
+    public async Task Play(string query, SearchMode searchMode = SearchMode.YouTube)
     {
+        await DeferAsync(ephemeral: true);
+        
         var player = await MusicModule.GetPlayerAsync(true, Context);
 
         if (player == null)
@@ -45,17 +45,28 @@ public partial class MusicCommand
                 await player.PlayAsync(playlistTrack, enqueue: true);
             }
 
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music",
                 $"เพิ่ม {playlist.Count} เพลงไปยังคิวแล้ว", Color.Blue), ephemeral: true);
             return;
         }
         
+        LavalinkTrack? track = null;
 
-        var track = await MusicModule.AudioService.GetTrackAsync(query, SearchMode.None);
+        for (int i = 0; i < 5; i++)
+        {
+            track = await MusicModule.AudioService.GetTrackAsync(query, searchMode);
+            
+            Thread.Sleep(1500);
+
+            if (track != null)
+            {
+                break;
+            }
+        }
 
         if (track == null)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีผลการค้นหา", Color.Gold));
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีผลการค้นหา", Color.Gold));
             return;
         }
 
@@ -72,11 +83,11 @@ public partial class MusicCommand
 
         if (position == 0)
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"กำลังเล่น {track.Title} - {track.Source}", Color.Blue), ephemeral: true);
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"กำลังเล่น {track.Title} - {track.Source}", Color.Blue), ephemeral: true);
         }
         else
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue), ephemeral: true);
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"เพิ่ม {track.Title} ไปยังคิวที่ {position}", Color.Blue), ephemeral: true);
         }
     }
 }

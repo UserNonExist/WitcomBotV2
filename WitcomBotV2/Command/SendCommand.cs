@@ -4,7 +4,7 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using WitcomBotV2.Service;
 
-namespace WitcomBotV2.Command.PingTriggers;
+namespace WitcomBotV2.Command;
 
 public class SendCommand : InteractionModuleBase<ShardedInteractionContext>
 {

@@ -1,7 +1,6 @@
-﻿using Discord.Interactions;
-using Discord;
+﻿using Discord;
+using Discord.Interactions;
 using Lavalink4NET.Player;
-using Lavalink4NET.Rest;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 

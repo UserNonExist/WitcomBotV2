@@ -1,7 +1,5 @@
 ﻿using Discord;
 using Discord.Interactions;
-using Discord.Rest;
-using Discord.WebSocket;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
@@ -36,8 +34,7 @@ public partial class MusicCommand
         int count = 0;
 
         List<EmbedBuilder> embeds = new List<EmbedBuilder>();
-
-        var components = await Modal.MusicModal.CreateButton();
+        
         double totalpage = 1;
 
         if (player.Queue.Count % 15 != 0)
@@ -52,8 +49,8 @@ public partial class MusicCommand
         foreach (var track in player.Queue.Tracks)
         {
             count += 1;
-            var context = (TrackContext)track.Context!;
-            embedBuilder.AddField($"{count}. {track.Title} - Requester: {context.Requester.Mention}", track.Uri);
+            var context = (TrackContext)player.CurrentTrack!.Context!;
+            embedBuilder.AddField($"{count}. {track.Title} - Requester: {context.Requester.Username}", track.Uri);
             
             if (count % 15 == 0)
             {

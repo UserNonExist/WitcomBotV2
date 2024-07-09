@@ -16,7 +16,7 @@ public partial class SecureCommand
             Module.SecureChatModule.AvaliableGuildChannel.Remove(
                 Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id));
             
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "ยกเลิกการค้นหาห้องสนทนาข้ามเซิร์ฟเวอร์", Color.Blue), ephemeral: true);
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "ยกเลิกการค้นหาห้องสนทนาข้ามเซิร์ฟเวอร์", Color.Blue));
             return;
         }
         
@@ -27,10 +27,10 @@ public partial class SecureCommand
         {
             
             Module.SecureChatModule.DestroyLobby(Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id));
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "กำลังตัดการเชื่อมต่อ...", Color.Red), ephemeral: true);
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "กำลังตัดการเชื่อมต่อ...", Color.Red));
             return;
         }
         
-        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "คุณยังไม่ได้เชื่อมต่อกับห้องสนทนาข้ามเซิร์ฟเวอร์", Color.Red), ephemeral: true);
+        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "คุณยังไม่ได้เชื่อมต่อกับห้องแชท", Color.Red), ephemeral: true);
     }
 }

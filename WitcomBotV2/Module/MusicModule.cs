@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Interactions;
-using Discord.Rest;
 using Discord.WebSocket;
 using Lavalink4NET;
 using Lavalink4NET.Artwork;
@@ -15,8 +14,7 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Module;
 
-
-public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
+public class MusicModule: InteractionModuleBase<SocketInteractionContext>
 {
     public static IAudioService AudioService;
     public static ArtworkService ArtworkService;
@@ -32,24 +30,15 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
     public static async Task Init()
     {
         DiscordClientWrapper = new DiscordClientWrapper(Bot.Client);
-        List<LavalinkNodeOptions> nodes = new List<LavalinkNodeOptions>();
         
-        foreach (var nodeList in Program.Config.LavalinkNodeList)
+        LavalinkNodeOptions nodeOptions = new LavalinkNodeOptions
         {
-            nodes.Add(new LavalinkNodeOptions
-            {
-                RestUri = nodeList.RestUri,
-                Password = nodeList.Password,
-                WebSocketUri = nodeList.WebSocketUri
-            });
-        }
-        
-        AudioService = new LavalinkCluster(new LavalinkClusterOptions
-        {
-            Nodes = nodes,
-            LoadBalacingStrategy = LoadBalancingStrategies.LoadStrategy,
-            StayOnline = true
-        }, DiscordClientWrapper);
+            RestUri = Program.Config.LavalinkList.RestUri,
+            Password = Program.Config.LavalinkList.Password,
+            WebSocketUri = Program.Config.LavalinkList.WebSocketUri
+        };
+
+        AudioService = new LavalinkNode(nodeOptions, DiscordClientWrapper);
         
         
         Log.Debug(nameof(Init), "Setting up Lavalink...");
@@ -78,10 +67,7 @@ public class MusicModule: InteractionModuleBase<ShardedInteractionContext>
         
         var service = new InactivityTrackingService(AudioService, 
             DiscordClientWrapper,
-            new InactivityTrackingOptions
-            {
-                DisconnectDelay = TimeSpan.FromSeconds(300),
-            });
+            new InactivityTrackingOptions());
         
         
         

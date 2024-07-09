@@ -21,12 +21,12 @@ public partial class SecureCommand : InteractionModuleBase<ShardedInteractionCon
         
         if (Module.SecureChatModule.MatchedChannel.ContainsKey(Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id)) || Module.SecureChatModule.MatchedChannel.ContainsValue(Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id)))
         {
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "คุณได้เชื่อมต่อกับห้องสนทนาข้ามเซิร์ฟเวอร์ไปแล้ว", Color.Red), ephemeral: true);
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "คุณได้เชื่อมต่อกับห้องแชทไปแล้ว", Color.Red), ephemeral: true);
             return;
         }
         
         Module.SecureChatModule.AvaliableGuildChannel.Add(Context.Guild.Channels.FirstOrDefault(x => x.Id == Context.Channel.Id));
         
-        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "เริ่มการค้นหาห้องสนทนาข้ามเซิร์ฟเวอร์", Color.Blue), ephemeral: true);
+        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "เริ่มการค้นหาห้องแชท...", Color.Blue));
     }
 }

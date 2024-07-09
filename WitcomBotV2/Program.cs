@@ -4,13 +4,14 @@ namespace WitcomBotV2;
 
 using Newtonsoft.Json;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 
 public class Program
 {
     private static Config? _config;
     private static string KCfile = "config.json";
     private static Bot? _bot;
-
+    
     public static string DatabaseFile { get; } = Path.Combine(Environment.CurrentDirectory, "Witcom.db");
     public static Config Config => _config ??= GetConfig();
     public static Random Rng { get; } = new();

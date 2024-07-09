@@ -26,7 +26,7 @@ public partial class MusicCommand
         if (player.Queue.IsEmpty)
         {
             await player.StopAsync();
-            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว หยุดการเล่นเพลงทั้งหมดแล้ว", Color.Blue));
+            await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ไม่มีเพลงในคิว, หยุดการเล่นเพลงทั้งหมดแล้ว", Color.Blue));
         }
         
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", $"ข้ามเพลง {player.CurrentTrack.Title}", Color.Blue));

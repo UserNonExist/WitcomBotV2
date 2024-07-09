@@ -16,7 +16,12 @@ public class ChannelRenting
         "ห้องของ %user",
         "%user's hellhole",
         "ห้องใต้ดินของ %user",
-        "ที่นอนเล่นของ %user"
+        "ที่นอนเล่นของ %user",
+        "ห้องเก็บของของ %user",
+        "%user sex dungeon",
+        "sussy %user",
+        "%user's cunny church",
+        "smelly %user"
     };
 
     public static async Task OnVoiceStateChanged(SocketUser user, SocketVoiceState before, SocketVoiceState after)
@@ -63,7 +68,7 @@ public class ChannelRenting
         }, RequestOptions.Default) as IVoiceChannel;
 
         await channel.AddPermissionOverwriteAsync(guild.EveryoneRole,
-            new OverwritePermissions(connect: PermValue.Allow));
+            new OverwritePermissions(connect: PermValue.Deny));
         await channel.AddPermissionOverwriteAsync(guildUser, new(connect: PermValue.Allow));
         var staffRole = guild.GetRole(Program.Config.DiscAdminId);
         await channel.AddPermissionOverwriteAsync(staffRole,

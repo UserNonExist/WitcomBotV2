@@ -18,4 +18,5 @@ public enum ErrorCodes
     TriggerLengthExceedsLimit,
     UnableToParseId,
     AlreadyExists,
+    CouldNotGetIp,
 }

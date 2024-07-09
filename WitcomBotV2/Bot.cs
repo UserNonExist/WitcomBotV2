@@ -8,10 +8,13 @@ using Discord.Rest;
 using Lavalink4NET;
 using Lavalink4NET.DiscordNet;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using WitcomBotV2.Command;
 using WitcomBotV2.Modal;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace WitcomBotV2;
 
@@ -29,8 +32,13 @@ public class Bot
     public SlashCommandHandler SlashCommandHandler { get; private set; } = null!;
 
     public static Bot Instance { get; private set; } = null!;
+    public static IServiceProvider _provider;
+    public MinecraftModule MinecraftModule { get; private set; }
     
-    public void Destroy() => _client.LogoutAsync();
+    public void Destroy()
+    {
+        _client.LogoutAsync();
+    }
 
     public Bot(string[] args)
     {
@@ -40,6 +48,8 @@ public class Bot
 
     private async Task Init(string[] arg)
     {
+        //_provider = CreateProvider();
+        
         try
         {
             TokenUtils.ValidateToken(TokenType.Bot, Program.Config.BotToken);
@@ -68,6 +78,11 @@ public class Bot
         
         Log.Debug(nameof(Init), "Setting up message handlers..");
         Client.MessageReceived += PingTriggers.HandleMessage;
+        
+        Log.Debug(nameof(Init), "Setting up minecraft tcp ping...");
+        MinecraftModule = new MinecraftModule();
+        MinecraftModule.Init();
+        
 
         Log.Debug(nameof(Init), "Setting up interaction handlers..");
         
@@ -80,10 +95,13 @@ public class Bot
         {
             Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
+            
             Log.Debug(nameof(Init), "Initializing MusicModule..");
-            await MusicModule.Init();
-            //Log.Debug(nameof(Init), "Initializing SecureChat Module..");
-            //await SecureChatModule.Init();
+            if (!arg.Contains("--nomusic"))
+                await MusicModule.Init();
+            
+            Log.Debug(nameof(Init), "Initializing SecureChat Module..");
+            await SecureChatModule.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;
@@ -103,4 +121,5 @@ public class Bot
 
         await Task.Delay(-1);
     }
+    
 }

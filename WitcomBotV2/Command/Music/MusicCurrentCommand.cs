@@ -30,9 +30,7 @@ public partial class MusicCommand
         embed.WithTitle("Music");
         embed.WithCurrentTimestamp();
         embed.WithColor(Color.Green);
-        embed.WithDescription($"กำลังเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}" +
-                              $"\nRequested by: {context.Requester.Mention}" +
-                              $"\n\n{player.CurrentTrack.Duration}");
+        embed.WithDescription($"กำลังเล่นเพลง \n[{player.CurrentTrack.Title}]({player.CurrentTrack.Uri}) - {player.CurrentTrack.Author}\nRequested by: {context.Requester.Mention}\n\n{player.CurrentTrack.Duration}");
         embed.WithImageUrl(artwork.ToString());
         embed.WithFooter(EmbedBuilderService.FooterText);
         

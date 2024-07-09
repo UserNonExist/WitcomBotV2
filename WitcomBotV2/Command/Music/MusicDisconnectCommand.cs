@@ -19,7 +19,6 @@ public partial class MusicCommand : InteractionModuleBase<ShardedInteractionCont
         }
 
         await player.StopAsync(true);
-        player.Dispose();
         await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Music", "ออกจากห้องเสียงแล้ว", Color.Blue));
     }
 }

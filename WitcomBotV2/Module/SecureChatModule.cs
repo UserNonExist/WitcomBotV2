@@ -17,31 +17,24 @@ public class SecureChatModule
         MatchMakingLoop();
     }
     
-    public static void StartMatchmaking()
-    {
-        Task.Run(MatchMakingLoop);
-    }
-    
     public static async Task MatchMakingLoop()
     {
         for (;;)
         {
             await Task.Delay(10000);
             
-            Log.Debug(nameof(MatchMakingLoop), "Attempting to matchmake..");
-            
-            AttepmtMatchmaking();
+            AttemptMatchmaking();
         }
     }
     
-    public static void AttepmtMatchmaking()
+    public static void AttemptMatchmaking()
     {
         if (AvaliableGuildChannel.Count < 2)
         {
             return;
         }
         
-        Log.Debug(nameof(AttepmtMatchmaking), "Requirement met, attempting to matchmake..");
+        Log.Debug(nameof(AttemptMatchmaking), "Requirement met, attempting to matchmake..");
         
         Matchmaking();
     }
@@ -54,19 +47,23 @@ public class SecureChatModule
         if (MatchedChannel.ContainsKey(message.Channel as SocketGuildChannel))
         {
             string messageContent = message.Content;
+            
+            messageContent += message.Attachments.Count > 0 ? $"\n`{message.Attachments.First().Url}`" : "";
 
             SocketGuildChannel targetChannel = MatchedChannel[message.Channel as SocketGuildChannel];
             
-            await targetChannel.Guild.GetTextChannel(targetChannel.Id).SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"{message.Author.Username} - {messageContent}", Color.Green));
+            await targetChannel.Guild.GetTextChannel(targetChannel.Id).SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed($"{message.Author.GlobalName} - Secure Chat", $"{messageContent}", Color.Purple, imgthumb: message.Author.GetDisplayAvatarUrl()));
         }
 
         if (MatchedChannel.ContainsValue(message.Channel as SocketGuildChannel))
         {
             string messageContent = message.Content;
+            
+            messageContent += message.Attachments.Count > 0 ? $"\n`{message.Attachments.First().Url}`" : "";
 
             SocketGuildChannel targetChannel = MatchedChannel.FirstOrDefault(x => x.Value == message.Channel as SocketGuildChannel).Key;
 
-            await targetChannel.Guild.GetTextChannel(targetChannel.Id).SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"{message.Author.Username} - {messageContent}", Color.Green));
+            await targetChannel.Guild.GetTextChannel(targetChannel.Id).SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed($"{message.Author.GlobalName} - Secure Chat", $"{messageContent}", Color.Purple, imgthumb: message.Author.GetDisplayAvatarUrl()));
         }
     }
     
@@ -83,12 +80,12 @@ public class SecureChatModule
         MatchedChannel.Add(channel1, channel2);
 
         await channel1.Guild.GetTextChannel(channel1.Id)
-            .SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"หาห้องแชทสำเร็จ! เริ่มทำการเชื่อมต่อ",
-                Color.Gold));
+            .SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"หาห้องแชทสำเร็จ!",
+                Color.Green));
 
         await channel2.Guild.GetTextChannel(channel2.Id).SendMessageAsync(
-            embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"หาห้องแชทสำเร็จ! เริ่มทำการเชื่อมต่อ",
-                Color.Gold));
+            embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"หาห้องแชทสำเร็จ!",
+                Color.Green));
     }
 
     public static async Task DestroyLobby(SocketGuildChannel channel)
@@ -113,10 +110,23 @@ public class SecureChatModule
         }
         
         await channel1.Guild.GetTextChannel(channel1.Id)
-            .SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"ตัดการเชื่อมต่อสำเร็จ", Color.Gold));
+            .SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"ตัดการเชื่อมต่อสำเร็จ", Color.Red));
 
         await channel2.Guild.GetTextChannel(channel2.Id).SendMessageAsync(
-            embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"ห้องแชทอีกฝั่งได้ทำการตัดการเชื่อมต่อ",
-                Color.Gold));
+            embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", $"อีกห้องแชทได้ทำการตัดการเชื่อมต่อ",
+                Color.Red));
+    }
+
+    public static async Task DisconnectAllLobby()
+    {
+        foreach (var channel in MatchedChannel)
+        {
+            await channel.Key.Guild.GetTextChannel(channel.Key.Id)
+                .SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "บอทถูกตัดการเชื่อมต่อ", Color.Orange));
+            await channel.Value.Guild.GetTextChannel(channel.Value.Id)
+                .SendMessageAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Secure Chat", "บอทถูกตัดการเชื่อมต่อ", Color.Orange));
+            
+            MatchedChannel.Remove(channel.Key);
+        }
     }
 }

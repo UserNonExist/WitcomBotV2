@@ -53,6 +53,12 @@ public class ErrorHandlingService
         {
             ErrorCodes.AlreadyExists, "An entry with that identifier already exists."
         },
+        {
+            ErrorCodes.CouldNotGetIp, "ไม่สามารถหา IP ของเซิร์ฟเวอร์ได้"
+        },
+        {
+            ErrorCodes.UnableToParseId, "Unable to parse ID from {0}"
+        }
     };
 
     private static string GetErrorMessage(ErrorCodes e, string extra = "") => $"Code {(int)e}: {e.ToString().SplitCamelCase()} {extra}".TrimEnd(' ');

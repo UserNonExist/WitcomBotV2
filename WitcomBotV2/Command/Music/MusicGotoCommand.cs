@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Interactions;
-using Lavalink4NET.Player;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
