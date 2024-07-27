@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using mcswlib.ServerStatus;
 using mcswlib.ServerStatus.Event;
+using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Module;
 
@@ -8,48 +9,88 @@ public class MinecraftModule
 {
     public ServerStatusFactory ServerStatusFactory { get; set; }
     
-    public Dictionary<PlayerPayLoad, int> PlayerList { get; set; }
+    public List<MinecraftServerInfo> MinecraftServerInfos { get; set; } = new();
     
     public void Init()
     {
         ServerStatusFactory = new ServerStatusFactory();
-        PlayerList = new Dictionary<PlayerPayLoad, int>();
         
-        ServerStatusFactory.ServerChanged += OnFactoryChanged;
+        ServerStatusFactory.ServerChanged += OnServerChanged;
+
+        foreach (var mcSvr in Program.Config.MinecraftServers)
+        {
+            ServerStatusFactory.Make(mcSvr.Host, mcSvr.Port, false, mcSvr.SrvRecord);
+            
+            MinecraftServerInfos.Add(new MinecraftServerInfo
+            {
+                SrvRecord = mcSvr.SrvRecord,
+                Host = mcSvr.Host,
+                Port = mcSvr.Port,
+                Info = mcSvr.Info,
+                Players = new List<MinecraftPlayerInfo>()
+            });
+            
+            Log.Debug($"{nameof(MinecraftModule)}.{nameof(Init)}", $"Added server {mcSvr.Host}:{mcSvr.Port}");
+        }
         
-        ServerStatusFactory.Make("localhost", 25565, false, "wc");
         ServerStatusFactory.StartAutoUpdate();
     }
     
-    public void OnFactoryChanged(object sender, EventBase[] e)
+    public void OnServerChanged(object sender, EventBase[] e)
     {
-        Console.WriteLine("Server changed");
-        foreach (var evt in e)
-        {
-            Console.WriteLine(evt);
-        }
+        var server = (ServerStatus)sender;
         
-        var entry = ServerStatusFactory.Entries.FirstOrDefault(x => x.Label == "wc");
+        Log.Debug($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server {server.Label} status updated");
 
-        foreach (var player in entry.PlayerList)
+        var mcSvr = MinecraftServerInfos.FirstOrDefault(x => x.SrvRecord == server.Label);
+        
+        if (mcSvr == null)
         {
-            if (PlayerList.ContainsKey(player))
-            {
-                PlayerList[player]++;
-            }
-            else
-            {
-                PlayerList.Add(player, 1);
-            }
+            Log.Error($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server {server.Label} not found in MinecraftServerInfos");
+            return;
         }
         
-        foreach (var player in PlayerList)
+        mcSvr.Motd = server.MOTD;
+
+        var players = server.PlayerList;
+        
+        Dictionary<MinecraftPlayerInfo, bool> checkedPlayers = new();
+        
+        foreach (var player in mcSvr.Players)
         {
-            if (!entry.PlayerList.Contains(player.Key))
+            checkedPlayers.Add(player, false);
+        }
+
+        foreach (var playerPayLoad in players)
+        {
+            var player = mcSvr.Players.FirstOrDefault(x => x.UUID == playerPayLoad.Id);
+            
+            if (player == null)
             {
-                PlayerList.Remove(player.Key);
+                mcSvr.Players.Add(new MinecraftPlayerInfo
+                {
+                    Name = playerPayLoad.Name,
+                    UUID = playerPayLoad.Id,
+                    FirstConnect = DateTime.Now
+                });
+                checkedPlayers.Add(mcSvr.Players.Last(), true);
+                
+                continue;
+            }
+            
+            if (playerPayLoad.Id == player.UUID)
+            {
+                checkedPlayers[player] = true;
+                continue;
             }
         }
-        
+
+        foreach (var player in checkedPlayers)
+        {
+            if (!player.Value)
+            {
+                mcSvr.Players.Remove(player.Key);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command.Minecraft;
@@ -10,27 +11,42 @@ public partial class MinecraftCommand
     public async Task GetStatus()
     {
         await DeferAsync();
-        
-        var entry = Bot.Instance.MinecraftModule.ServerStatusFactory.Entries.FirstOrDefault(x => x.Label == "wc");
-        
-        if (entry == null)
-        {
-            await FollowupAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.Unspecified, "Cannot find server status entry"));
-            return;
-        }
-        
-        string desc = "จำนวนผู้เล่นที่กำลังเล่นอยู่: **" + entry.PlayerCount + "/" + entry.MaxPlayerCount + "**\n\n";
-        desc += "ผู้เล่นที่กำลังเล่นอยู่: \n";
-        foreach (var player in Bot.Instance.MinecraftModule.PlayerList)
-        {
-            desc += " + " + player.Key.Name + $" - {player.Value / 2} minute(s) in\n";
-        }
-        desc += "\n";
-        desc += "*เวลาอัปเดต: " + entry.LastStatusDate + "*";
-        
-        string header = $"Minecraft - " + (entry.IsOnline ? "ออนไลน์" : "ออฟไลน์");
-        Color color = entry.IsOnline ? Color.Green : Color.Red;
 
-        await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed(header, desc, color));
+        var lists = Bot.Instance.MinecraftModule.ServerStatusFactory.Entries;
+
+        var embed = new EmbedBuilder()
+            .WithTitle("Minecraft")
+            .WithDescription($"# สถานะของเซิร์ฟเวอร์\n<updateTxt>\n\n")
+            .WithColor(Color.Blue)
+            .WithFooter(EmbedBuilderService.FooterText);
+
+        string updateTime = "";
+        
+        foreach (var entry in lists)
+        {
+            embed.Description += $"**{entry.Label}** - ";
+            embed.Description += entry.IsOnline ? ":green_square: ออนไลน์" : ":red_square: ออฟไลน์";
+            embed.Description += $"\n";
+            
+            if (entry.IsOnline)
+            {
+                embed.Description += $"MOTD: {entry.MOTD}\n";
+                embed.Description += $"Players: {entry.PlayerCount}/{entry.MaxPlayerCount}\n\n";
+            }
+            else
+            {
+                embed.Description += "\n";
+            }
+
+            if (updateTime == "")
+            {
+                updateTime = entry.LastStatusDate;
+            }
+        }
+        
+        embed.Description += "ใช้คำสั่ง `/minecraft info <เซิร์ฟเวอร์แอดเดรส | server address>` เพื่อดูข้อมูลเพิ่มเติม";
+        embed.Description = embed.Description.Replace("<updateTxt>", $"### อัพเดทล่าสุด: {updateTime}");
+        
+        await FollowupAsync(embed: embed.Build());
     }
 }

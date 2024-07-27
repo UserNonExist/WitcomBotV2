@@ -22,6 +22,6 @@ public class Config
         WebSocketUri = "ws://localhost:2333",
         Password = "youshallnotpass"
     };
-    
-    public string MinecraftModpackInfo { get; set; }
+
+    public List<MinecraftServerOption> MinecraftServers { get; set; } = new();
 }
