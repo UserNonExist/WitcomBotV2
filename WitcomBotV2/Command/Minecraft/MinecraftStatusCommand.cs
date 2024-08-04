@@ -16,22 +16,23 @@ public partial class MinecraftCommand
 
         var embed = new EmbedBuilder()
             .WithTitle("Minecraft")
-            .WithDescription($"# สถานะของเซิร์ฟเวอร์\n<updateTxt>\n\n")
+            .WithDescription($"# สถานะของเซิร์ฟเวอร์\n<updateTxt>\n\n\n")
             .WithColor(Color.Blue)
-            .WithFooter(EmbedBuilderService.FooterText);
+            .WithFooter(EmbedBuilderService.FooterText)
+            .WithCurrentTimestamp();
 
         string updateTime = "";
         
         foreach (var entry in lists)
         {
-            embed.Description += $"**{entry.Label}** - ";
+            embed.Description += $"## `{entry.Label}` - ";
             embed.Description += entry.IsOnline ? ":green_square: ออนไลน์" : ":red_square: ออฟไลน์";
             embed.Description += $"\n";
             
             if (entry.IsOnline)
             {
-                embed.Description += $"MOTD: {entry.MOTD}\n";
-                embed.Description += $"Players: {entry.PlayerCount}/{entry.MaxPlayerCount}\n\n";
+                embed.Description += $"**MOTD:** {entry.MOTD}\n";
+                embed.Description += $"**Players:** {entry.PlayerCount}/{entry.MaxPlayerCount}\n\n";
             }
             else
             {

@@ -23,35 +23,53 @@ public partial class MinecraftCommand : InteractionModuleBase<ShardedInteraction
         
         if (entry == null)
         {
-            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed($"Minecraft - {serverAddress}", "ไม่พบข้อมูลของเซิร์ฟเวอร์นี้", Color.Red), ephemeral: true);
+            string avaliableServers = "";
+            foreach (var srv in Bot.Instance.MinecraftModule.MinecraftServerInfos)
+            {
+                avaliableServers += "`" + srv.SrvRecord + "`\n";
+                avaliableServers += srv.Motd + "\n\n";
+            }
+            
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed($"Minecraft - {serverAddress}", "ไม่พบข้อมูลของเซิร์ฟเวอร์นี้\nเซิร์ฟเวอร์แอดเดรสที่ใส่ได้\n\n\n " + avaliableServers, Color.Red), ephemeral: true);
             return;
         }
         
         if (!entry.IsOnline)
         {
-            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed($"Minecraft - {serverAddress}", "เซิร์ฟเวอร์นี้ออฟไลน์", Color.Red));
+            await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed($"Minecraft - {serverAddress}", "เซิร์ฟเวอร์นี้ออฟไลน์\n\nถ้าหากว่าเกิดปัญหาขึ้นให้แจ้งด้วย", Color.Red));
             return;
         }
         
         var mcInfo = Bot.Instance.MinecraftModule.MinecraftServerInfos.FirstOrDefault(x => x.SrvRecord == serverAddress);
 
         var embed = new EmbedBuilder()
-            .WithTitle($"Minecraft - {serverAddress}")
+            .WithTitle($"Minecraft - {serverAddress} | {entry.PlayerCount}/{entry.MaxPlayerCount} คนออนไลน์")
             .WithDescription($"# ข้อมูลของเซิร์ฟเวอร์\nMOTD: {mcInfo.Motd}\n\nข้อมูลเพิ่มเติม: {mcInfo.Info}\n\n")
             .WithColor(Color.Blue)
-            .WithFooter(EmbedBuilderService.FooterText);
-
-        int i = 1;
+            .WithFooter(EmbedBuilderService.FooterText)
+            .WithCurrentTimestamp();
+        
+        if (mcInfo.Players.Count == 0)
+        {
+            embed.Description += "ไม่มีผู้เล่นออนไลน์";
+            embed.AddField("ผู้เล่น", "-", true);
+            embed.AddField("เวลาออนไลน์", "-", true);
+            await FollowupAsync(embed: embed.Build());
+            return;
+        }
+        
+        string name = "";
+        string time = "";
 
         foreach (var ply in mcInfo.Players)
         {
             var duration = (DateTime.Now - ply.FirstConnect).Duration();
-            
-            embed.AddField("ลำดับ", i, true);
-            embed.AddField("ผู้เล่น", ply.Name, true);
-            embed.AddField("เวลาออนไลน์", duration.ToString(@"hh\:mm"), true);
-            i += 1;
+            name += ply.Name + "\n";
+            time += $"{duration.Hours} ชั่วโมง {duration.Minutes} นาที" + "\n";
         }
+        
+        embed.AddField("ผู้เล่น", name, true);
+        embed.AddField("เวลาออนไลน์", time, true);
         
         await FollowupAsync(embed: embed.Build());
     }

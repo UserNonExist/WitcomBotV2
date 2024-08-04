@@ -10,6 +10,7 @@ public class MinecraftModule
     public ServerStatusFactory ServerStatusFactory { get; set; }
     
     public List<MinecraftServerInfo> MinecraftServerInfos { get; set; } = new();
+    public Dictionary<MinecraftPlayerInfo, CancellationTokenSource> DisconnectingPlayers { get; set; } = new();
     
     public void Init()
     {
@@ -30,7 +31,7 @@ public class MinecraftModule
                 Players = new List<MinecraftPlayerInfo>()
             });
             
-            Log.Debug($"{nameof(MinecraftModule)}.{nameof(Init)}", $"Added server {mcSvr.Host}:{mcSvr.Port}");
+            Log.Info($"{nameof(MinecraftModule)}.{nameof(Init)}", $"Added server {mcSvr.Host}:{mcSvr.Port}");
         }
         
         ServerStatusFactory.StartAutoUpdate();
@@ -40,8 +41,18 @@ public class MinecraftModule
     {
         var server = (ServerStatus)sender;
         
-        Log.Debug($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server {server.Label} status updated");
+        
+        Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server {server.Label} status updated: ");
 
+        if (server.IsOnline)
+        {
+            Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server is now online");
+        }
+        else
+        {
+            Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", "Server is now offline");
+        }
+        
         var mcSvr = MinecraftServerInfos.FirstOrDefault(x => x.SrvRecord == server.Label);
         
         if (mcSvr == null)
@@ -65,32 +76,76 @@ public class MinecraftModule
         {
             var player = mcSvr.Players.FirstOrDefault(x => x.UUID == playerPayLoad.Id);
             
-            if (player == null)
+            if (player != null)
+            {
+                if (playerPayLoad.Id == player.UUID)
+                {
+                    checkedPlayers[player] = true;
+                    continue;
+                }
+            }
+            
+            var dcPlayer = DisconnectingPlayers.FirstOrDefault(x => x.Key.UUID == playerPayLoad.Id);
+                
+            if (dcPlayer.Key != null)
             {
                 mcSvr.Players.Add(new MinecraftPlayerInfo
                 {
                     Name = playerPayLoad.Name,
                     UUID = playerPayLoad.Id,
-                    FirstConnect = DateTime.Now
+                    FirstConnect = dcPlayer.Key.FirstConnect
                 });
-                checkedPlayers.Add(mcSvr.Players.Last(), true);
-                
-                continue;
+                    
+                DisconnectingPlayers.FirstOrDefault(x => x.Key.UUID == playerPayLoad.Id).Value.Cancel();
+                Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Player {playerPayLoad.Name} reconnected to the server");
             }
-            
-            if (playerPayLoad.Id == player.UUID)
+            else
             {
-                checkedPlayers[player] = true;
-                continue;
+                mcSvr.Players.Add(new MinecraftPlayerInfo
+                {
+                    Name = playerPayLoad.Name,
+                    UUID = playerPayLoad.Id,
+                    FirstConnect = DateTime.Now 
+                });
+                    
+                Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Player {playerPayLoad.Name} joined the server");
             }
+                
+            checkedPlayers.Add(mcSvr.Players.Last(), true);
         }
 
         foreach (var player in checkedPlayers)
         {
             if (!player.Value)
             {
+                DisconnectingPlayers.Add(player.Key, new CancellationTokenSource());
+                DcTimer(player.Key, DisconnectingPlayers[player.Key], 300);
                 mcSvr.Players.Remove(player.Key);
+                Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Player {player.Key.Name} left the server, " +
+                    $"they have 5 minutes of grace period before playtime is reset");
             }
         }
+    }
+    
+    public async Task DcTimer(MinecraftPlayerInfo dcingPlayer, CancellationTokenSource cancellation, int time)
+    {
+        while (time > 0)
+        {
+            if (cancellation.Token.IsCancellationRequested)
+            {
+                Log.Info($"{nameof(MinecraftModule)}.{nameof(Timer)}", $"Timer for {dcingPlayer.Name} has been cancelled");
+                cancellation.Dispose();
+                DisconnectingPlayers.Remove(dcingPlayer);
+                return;
+            }
+            
+            await Task.Delay(1000);
+            time--;
+        }
+        
+        Log.Info($"{nameof(MinecraftModule)}.{nameof(Timer)}", $"Timer for {dcingPlayer.Name} has ended, removing player from disconnecting list");
+        
+        cancellation.Dispose();
+        DisconnectingPlayers.Remove(dcingPlayer);
     }
 }

@@ -6,7 +6,25 @@ public class Log
 {
     public static Task Send(LogMessage msg)
     {
+        switch (msg.Severity)
+        {
+            case LogSeverity.Info:
+                Console.ForegroundColor = ConsoleColor.White;
+                break;
+            case LogSeverity.Debug:
+                Console.ForegroundColor = ConsoleColor.Blue;
+                break;
+            case LogSeverity.Warning:
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                break;
+            case LogSeverity.Error:
+                Console.ForegroundColor = ConsoleColor.Red;
+                break;
+        }
+        
         Console.WriteLine(msg.ToString());
+        Console.ResetColor();
+        
         return Task.CompletedTask;
     }
 

@@ -22,7 +22,7 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
     
     private static readonly InactivityTrackingOptions Inactivityoptions = new InactivityTrackingOptions
     {
-        DisconnectDelay = TimeSpan.FromMinutes(2),
+        DisconnectDelay = TimeSpan.FromMinutes(5),
         PollInterval = TimeSpan.FromMinutes(1),
         TrackInactivity = true
     };

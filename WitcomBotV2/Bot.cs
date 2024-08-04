@@ -106,9 +106,9 @@ public class Bot
             Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;
 
-            Log.Debug(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
-            Log.Debug(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
-            Log.Debug(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
+            Log.Info(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
+            Log.Info(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
+            Log.Info(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
             Log.Info(nameof(Init), $"This is shard {_.ShardId+1} of {Client.Shards.Count} shards.");
         };
         
@@ -121,5 +121,4 @@ public class Bot
 
         await Task.Delay(-1);
     }
-    
 }
