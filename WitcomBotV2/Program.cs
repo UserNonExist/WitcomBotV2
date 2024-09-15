@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System.Globalization;
+using System.Security.Cryptography;
+using WitcomBotV2.Service;
 
 namespace WitcomBotV2;
 
@@ -27,7 +29,6 @@ public class Program
     
     private static Config GetConfig()
     {
-        
         if (!File.Exists(KCfile))
         {
             Console.WriteLine("Config file not found. Creating one...");
@@ -42,5 +43,17 @@ public class Program
         }
 
         return JsonConvert.DeserializeObject<Config>(File.ReadAllText(KCfile));
+    }
+    
+    public static async Task<bool> ReloadConfig()
+    {
+        if (!File.Exists(KCfile))
+        {
+            Log.Error($"{nameof(Program)}.{nameof(ReloadConfig)}", "Config file not found. WTF!!?!?!?!?");
+            return false;
+        }
+
+        _config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(KCfile));
+        return true;
     }
 }

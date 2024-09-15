@@ -9,5 +9,7 @@ public class MinecraftServerInfo
     public int Port { get; set; }
     public string Info { get; set; }
     public string Motd { get; set; }
+    public string SpecialNotice { get; set; }
+    public bool IsOnline { get; set; }
     public List<MinecraftPlayerInfo> Players { get; set; } = new();
 }

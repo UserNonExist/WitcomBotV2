@@ -28,6 +28,8 @@ public class MinecraftModule
                 Host = mcSvr.Host,
                 Port = mcSvr.Port,
                 Info = mcSvr.Info,
+                IsOnline = false,
+                SpecialNotice = "",
                 Players = new List<MinecraftPlayerInfo>()
             });
             
@@ -41,17 +43,7 @@ public class MinecraftModule
     {
         var server = (ServerStatus)sender;
         
-        
         Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server {server.Label} status updated: ");
-
-        if (server.IsOnline)
-        {
-            Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server is now online");
-        }
-        else
-        {
-            Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", "Server is now offline");
-        }
         
         var mcSvr = MinecraftServerInfos.FirstOrDefault(x => x.SrvRecord == server.Label);
         
@@ -59,6 +51,12 @@ public class MinecraftModule
         {
             Log.Error($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"Server {server.Label} not found in MinecraftServerInfos");
             return;
+        }
+
+        if (mcSvr.IsOnline != server.IsOnline)
+        {
+            mcSvr.IsOnline = server.IsOnline;
+            Log.Info($"{nameof(MinecraftModule)}.{nameof(OnServerChanged)}", $"The server is now " + (mcSvr.IsOnline ? "online" : "offline"));
         }
         
         mcSvr.Motd = server.MOTD;
@@ -148,4 +146,26 @@ public class MinecraftModule
         cancellation.Dispose();
         DisconnectingPlayers.Remove(dcingPlayer);
     }
+
+    public async Task<bool> RemoveAllPlaytime(MinecraftServerInfo mcInfo)
+    {
+        if (mcInfo.Players.Count == 0)
+        {
+            Log.Error($"{nameof(MinecraftModule)}.{nameof(RemoveAllPlaytime)}", "No players to remove playtime from");
+            return false;
+        }
+        
+        foreach (var player in mcInfo.Players)
+        {
+            DisconnectingPlayers.FirstOrDefault(x => x.Key.UUID == player.UUID).Value.Cancel();
+            DisconnectingPlayers.Remove(player);
+        }
+        
+        mcInfo.Players.Clear();
+        
+        Log.Info($"{nameof(MinecraftModule)}.{nameof(RemoveAllPlaytime)}", "All playtime has been removed");
+        return true;
+    }
+    
+    
 }
