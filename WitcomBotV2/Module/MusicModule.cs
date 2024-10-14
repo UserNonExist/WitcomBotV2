@@ -19,6 +19,7 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
     public static IAudioService AudioService;
     public static ArtworkService ArtworkService;
     public static DiscordClientWrapper DiscordClientWrapper;
+    public static bool IsEnabled = false;
     
     private static readonly InactivityTrackingOptions Inactivityoptions = new InactivityTrackingOptions
     {
@@ -77,10 +78,14 @@ public class MusicModule: InteractionModuleBase<SocketInteractionContext>
         AudioService.TrackException += OnTrackException;
 
         Log.Info(nameof(Init), "Lavalink connected.");
+        IsEnabled = true;
     }
 
     public static async ValueTask<VoteLavalinkPlayer> GetPlayerAsync(bool connectToVoiceChannel = true, ShardedInteractionContext context = null)
     {
+        if (!IsEnabled)
+            return null;
+        
         var player = AudioService.GetPlayer<VoteLavalinkPlayer>(context.Guild.Id);
 
         if (player != null && player.State != PlayerState.NotConnected

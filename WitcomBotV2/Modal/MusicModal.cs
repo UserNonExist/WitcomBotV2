@@ -4,8 +4,7 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Modal;
 
-//Literally redundant now lmao
-
+[Obsolete("Not in use.")]
 public class MusicModal
 {
     public static ButtonBuilder NextButton { get; } = new("Next", "music-next", ButtonStyle.Secondary);

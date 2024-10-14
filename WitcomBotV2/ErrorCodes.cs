@@ -19,4 +19,5 @@ public enum ErrorCodes
     UnableToParseId,
     AlreadyExists,
     CouldNotGetIp,
+    NoMusicClass,
 }

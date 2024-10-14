@@ -58,6 +58,9 @@ public class ErrorHandlingService
         },
         {
             ErrorCodes.UnableToParseId, "Unable to parse ID from {0}"
+        },
+        {
+            ErrorCodes.NoMusicClass, "ไม่ได้เชื่อมต่อกับเซิร์ฟเวอร์เพลง"
         }
     };
 

@@ -9,6 +9,7 @@ using Discord.WebSocket;
 using Service;
 using WitcomBotV2.TypeReaders;
 
+[Obsolete("This class is deprecated, use InteractionModuleBase instead.")]
 public class CommandHandler
 {
     private readonly DiscordShardedClient client;

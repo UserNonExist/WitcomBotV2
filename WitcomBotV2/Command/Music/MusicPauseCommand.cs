@@ -15,6 +15,7 @@ public partial class MusicCommand
         
         if (player == null)
         {
+            await RespondAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.NoMusicClass));
             return;
         }
 
