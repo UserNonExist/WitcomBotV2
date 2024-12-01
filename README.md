@@ -9,3 +9,5 @@ Overhaul WitcomBot using .NET heavily based on https://github.com/Exiled-Team/BL
  - MinecraftServerStatus
 
 I dunno what else to say honestly
+
+# ENABLE MESSAGE CONTENT INTENT FOR THE BOT TO START PROPERLY
