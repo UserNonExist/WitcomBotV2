@@ -6,7 +6,7 @@ using WitcomBotV2.Service;
 namespace WitcomBotV2.Command.Minecraft;
 
 [Group("minecraft", "คำสั่งที่เกี่ยวกับตัวเซิร์ฟเวอร์ minecraft")]
-public partial class MinecraftCommand : InteractionModuleBase<ShardedInteractionContext>
+public partial class MinecraftCommand : InteractionModuleBase<SocketInteractionContext>
 {
     [SlashCommand("info", "แสดงข้อมูลเกี่ยวกับเซิร์ฟเวอร์")]
     public async Task GetInfo(string serverAddress)

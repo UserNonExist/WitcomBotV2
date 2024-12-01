@@ -28,6 +28,14 @@ public class DatabaseHandler
                     "CREATE TABLE IF NOT EXISTS Pings(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId TEXT, Message TEXT)";
                 cmd.ExecuteNonQuery();
             }
+            
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                Log.Info(nameof(Init), "Creating table 'roleReaction'..");
+                cmd.CommandText =
+                    "CREATE TABLE IF NOT EXISTS RoleReaction(Id INTEGER PRIMARY KEY AUTOINCREMENT, MessageId TEXT, EmoteId TEXT)";
+                cmd.ExecuteNonQuery();
+            }
         }
         
     }

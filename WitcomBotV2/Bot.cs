@@ -1,30 +1,19 @@
-﻿using System.Net;
-using System.Net.Security;
-using Discord.Interactions;
+﻿using Discord.Interactions;
 using Discord.WebSocket;
-using Discord.Commands;
 using Discord;
-using Discord.Rest;
-using Lavalink4NET;
-using Lavalink4NET.DiscordNet;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using WitcomBotV2.Command;
-using WitcomBotV2.Modal;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
-using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 
 namespace WitcomBotV2;
 
 public class Bot
 {
-    private static DiscordShardedClient _client;
+    private static DiscordSocketClient? _client;
     private SocketGuild? _guild;
 
     public SocketGuild Guild => _guild ??= Client.Guilds.FirstOrDefault(g => g.Id == Program.Config.GuildId);
-    public static DiscordShardedClient Client => _client ??= new DiscordShardedClient(new DiscordSocketConfig
+    public static DiscordSocketClient Client => _client ??= new DiscordSocketClient(new DiscordSocketConfig
         { AlwaysDownloadUsers = true, MessageCacheSize = 10000, GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent});
     //Dont forget to change!!
 
@@ -32,7 +21,6 @@ public class Bot
     public SlashCommandHandler SlashCommandHandler { get; private set; } = null!;
 
     public static Bot Instance { get; private set; } = null!;
-    public static IServiceProvider _provider;
     public MinecraftModule MinecraftModule { get; private set; }
     
     public void Destroy()
@@ -91,17 +79,10 @@ public class Bot
         await SlashCommandHandler.InstallCommandAsync();
 
 
-        Client.ShardReady += async _ =>
+        Client.Ready += async () =>
         {
             Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
-            
-            Log.Debug(nameof(Init), "Initializing MusicModule..");
-            if (!arg.Contains("--nomusic"))
-                await MusicModule.Init();
-            
-            Log.Debug(nameof(Init), "Initializing SecureChat Module..");
-            await SecureChatModule.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;
@@ -109,7 +90,6 @@ public class Bot
             Log.Info(nameof(Init), $"Registered {slashCommandsRegistered} interaction modules.");
             Log.Info(nameof(Init), $"All modules initialized. Bot {Client.CurrentUser.Username} ready.");
             Log.Info(nameof(Init), $"Currently serving {Client.Guilds.Count} guilds.");
-            Log.Info(nameof(Init), $"This is shard {_.ShardId+1} of {Client.Shards.Count} shards.");
         };
         
         

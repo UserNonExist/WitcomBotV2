@@ -5,7 +5,7 @@ using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command;
 
-public class InfoCommand : InteractionModuleBase<ShardedInteractionContext>
+public class InfoCommand : InteractionModuleBase<SocketInteractionContext>
 {
     [DefaultMemberPermissions(GuildPermission.SendMessages)]
     [SlashCommand("info", "ดูข้อมูลเกี่ยวกับบอท")]

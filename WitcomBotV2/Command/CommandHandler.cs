@@ -12,10 +12,10 @@ using WitcomBotV2.TypeReaders;
 [Obsolete("This class is deprecated, use InteractionModuleBase instead.")]
 public class CommandHandler
 {
-    private readonly DiscordShardedClient client;
+    private readonly DiscordSocketClient client;
     private readonly CommandService service;
 
-    public CommandHandler(DiscordShardedClient client, CommandService service)
+    public CommandHandler(DiscordSocketClient client, CommandService service)
     {
         this.client = client;
         this.service = service;
@@ -38,7 +38,7 @@ public class CommandHandler
               msg.HasMentionPrefix(client.CurrentUser, ref argPos)) || msg.Author.IsBot)
             return;
 
-        ShardedCommandContext context = new(client, msg);
+        SocketCommandContext context = new(client, msg);
 
         try
         {

@@ -10,9 +10,9 @@ namespace WitcomBotV2.Command;
 public class SlashCommandHandler
 {
     private readonly InteractionService _service;
-    private readonly DiscordShardedClient _client;
+    private readonly DiscordSocketClient _client;
     
-    public SlashCommandHandler(InteractionService service, DiscordShardedClient client)
+    public SlashCommandHandler(InteractionService service, DiscordSocketClient client)
     {
         _service = service;
         _client = client;
@@ -31,7 +31,7 @@ public class SlashCommandHandler
     {
         try
         {
-            ShardedInteractionContext context = new(_client, interaction);
+            SocketInteractionContext context = new(_client, interaction);
             await _service.ExecuteCommandAsync(context, null);
             //await SpamPrevention.HandleInteraction(interaction);
             Log.Info(nameof(HandleInteraction), $"{interaction.User.Username} used an interaction.");

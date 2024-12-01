@@ -17,7 +17,7 @@ public class ErrorHandlingService
             ErrorCodes.SpecifiedUserNotFound, "ผู้ใช้ ({0}) ไม่อยู่ในเซิร์ฟเวอร์นี้"
         },
         {
-            ErrorCodes.InternalCommandError, "กูพังอะไรไปสักอย่าง ปิง User_NotExist\n{0}"
+            ErrorCodes.InternalCommandError, "พังอะไรไปสักอย่าง ปิงผู้ดูแล\n{0}"
         },
         {
             ErrorCodes.InvalidChannelId, "หาห้องไอดี {0} ไม่เจอ"
@@ -29,7 +29,7 @@ public class ErrorHandlingService
             ErrorCodes.InvalidNumberOfArguments, "คำสั่งนี้ต้องใส่ {0} ค่า"
         },
         {
-            ErrorCodes.DatabaseNotFound, "กูพังอะไรไปสักอย่าง ปิง User_NotExist"
+            ErrorCodes.DatabaseNotFound, "ดาต้าเบสพัง ได้ ไง"
         },
         {
             ErrorCodes.FailedToParseTitle,
@@ -45,7 +45,7 @@ public class ErrorHandlingService
             ErrorCodes.InvalidMessageId, "หาข้อความไอดี {0} ไม่เจอ"
         },
         {
-            ErrorCodes.Unspecified, "แกน่าจะใช้อะไรสักอย่างผิดไป แต่ก็ปิง User_NotExist มาเหอะ\n{0}"
+            ErrorCodes.Unspecified, "แกน่าจะใช้อะไรสักอย่างผิดไป {0}"
         },
         {
             ErrorCodes.TriggerLengthExceedsLimit, "Ping triggers มีตัวอักษรได้สูงสุด {0} ตัว"

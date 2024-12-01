@@ -1,18 +1,22 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Interactions;
+using Discord.WebSocket;
 using WitcomBotV2.Module;
 using WitcomBotV2.Service;
 
 namespace WitcomBotV2.Command;
 
 
-public class RunCommand : InteractionModuleBase<ShardedInteractionContext>
+public class RunCommand : InteractionModuleBase<SocketInteractionContext>
 {
     [SlashCommand("run", "Run a command")]
     public async Task Run([Discord.Interactions.Summary("Command", "Command to run")] string command)
     {
-        if (Context.User.Id != ulong.Parse("315717809395204098"))
+        SocketGuildUser guildUser = (SocketGuildUser)Context.User;
+        var permissions = guildUser.Roles;
+        
+        if (permissions.Any(r => r.Id == Program.Config.DiscAdminId))
         {
             await RespondAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.PermissionDenied), ephemeral: true);
             return;
