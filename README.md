@@ -5,12 +5,7 @@ Overhaul WitcomBot using .NET heavily based on https://github.com/Exiled-Team/BL
 
  - ChannelRenting
  - PingTrigger
- - AskGPT
- - MusicPlayer
+ - RoleReact
+ - MinecraftServerStatus
 
-## Feature to Implement
-
- - HomeworkTracker
- - SelfRole
-
-Contribution is very welcome, please make a pull request if you want to contribute.
+I dunno what else to say honestly

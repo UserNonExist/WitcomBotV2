@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Data;
+using System.Reflection;
 using Discord.WebSocket;
 
 namespace WitcomBotV2.Service;
@@ -33,7 +34,7 @@ public class DatabaseHandler
             {
                 Log.Info(nameof(Init), "Creating table 'roleReaction'..");
                 cmd.CommandText =
-                    "CREATE TABLE IF NOT EXISTS RoleReaction(Id INTEGER PRIMARY KEY AUTOINCREMENT, MessageId TEXT, EmoteId TEXT)";
+                    "CREATE TABLE IF NOT EXISTS RoleReaction(Id INTEGER PRIMARY KEY AUTOINCREMENT, RoleId TEXT ,MessageId TEXT, EmoteId TEXT, ChannelId Text)";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -88,7 +89,7 @@ public class DatabaseHandler
         {
             cmd.CommandText = type switch
             {
-                DatabaseType.Ping => "DELETE FROM Pings WHERE Id=@id",
+                DatabaseType.ReactRole => "DELETE FROM RoleReaction WHERE Id=@id",
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
 
@@ -148,4 +149,53 @@ public class DatabaseHandler
         return message;
     }
 
+    public static List<ReactionRoleData> GetReactionRoleData()
+    {
+        List<ReactionRoleData> reactionRoleData = new();
+        using (SqliteConnection connection = new(_connectionString))
+        {
+            connection.Open();
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM RoleReaction";
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        reactionRoleData.Add(new ReactionRoleData
+                        {
+                            Id = reader.GetInt32(0),
+                            RoleId = reader.GetString(1),
+                            MessageId = reader.GetString(2),
+                            Emote = reader.GetString(3),
+                            ChannelId = reader.GetString(4)
+                        });
+                    }
+                }
+            }
+            
+            connection.Close();
+        }
+        
+        return reactionRoleData;
+    }
+
+    public static void AddReactionRoleData(ulong roleId, ulong messageId, string emote, ulong channelId)
+    {
+        using SqliteConnection connection = new(_connectionString);
+        connection.Open();
+
+        using (SqliteCommand cmd = connection.CreateCommand())
+        {
+            cmd.CommandText = "INSERT INTO RoleReaction(RoleId, MessageId, EmoteId, ChannelId) VALUES(@roleId, @messageId, @emote, @channelId)";
+            cmd.Parameters.AddWithValue("@roleId", roleId.ToString());
+            cmd.Parameters.AddWithValue("@messageId", messageId.ToString());
+            cmd.Parameters.AddWithValue("@emote", emote);
+            cmd.Parameters.AddWithValue("@channelId", channelId.ToString());
+            cmd.ExecuteNonQuery();
+        }
+        
+        connection.Close();
+    }
 }

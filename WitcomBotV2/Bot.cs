@@ -70,7 +70,6 @@ public class Bot
         Log.Debug(nameof(Init), "Setting up minecraft tcp ping...");
         MinecraftModule = new MinecraftModule();
         MinecraftModule.Init();
-        
 
         Log.Debug(nameof(Init), "Setting up interaction handlers..");
         
@@ -83,6 +82,9 @@ public class Bot
         {
             Log.Debug(nameof(Init), "Initializing Database..");
             await DatabaseHandler.Init(arg.Contains("--updatetables"));
+            
+            Log.Debug(nameof(Init), "Setting up reaction handlers..");
+            RoleReaction.Init();
             
             Log.Debug(nameof(Init), "Registering Slash commands..");
             int slashCommandsRegistered = (await InteractionService.RegisterCommandsGloballyAsync(deleteMissing: true)).Count;

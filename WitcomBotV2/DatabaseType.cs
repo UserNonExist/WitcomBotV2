@@ -9,4 +9,5 @@ public enum DatabaseType
     BugReport,
     SelfRole,
     Tags,
+    ReactRole,
 }
