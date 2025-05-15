@@ -18,10 +18,10 @@ public class ChannelRenting
         "ห้องใต้ดินของ %user",
         "ที่นอนเล่นของ %user",
         "ห้องเก็บของของ %user",
-        "%user sex dungeon",
+        "%user sex dungeon /s",
         "sussy %user",
         "%user's cunny church",
-        "smelly %user"
+        "smelly %user",
     };
 
     public static async Task OnVoiceStateChanged(SocketUser user, SocketVoiceState before, SocketVoiceState after)

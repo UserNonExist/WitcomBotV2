@@ -18,6 +18,8 @@ public partial class RentCommand : InteractionModuleBase<SocketInteractionContex
                     "คุณสามารถใช้คำสั่งนี้ได้ในขณะที่คุณเป็นคนเช่า VC เท่านั้น"), ephemeral: true);
             return;
         }
+        
+        await DeferAsync();
 
         List<IGuildUser> guildUsers = new();
         string userMention = "";
@@ -40,7 +42,7 @@ public partial class RentCommand : InteractionModuleBase<SocketInteractionContex
             userMention += user.Mention + "\n";
         }
 
-        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("VC Renting",
+        await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("VC Renting",
             "ผู้ใช้ดังต่อไปนี้จะไม่สามารถเข้าห้อง VC คุณได้แล้ว\n\n" + userMention, Color.Magenta));
     }
     

@@ -31,7 +31,7 @@ public partial class ReactCommand
             var message = await channel.GetMessageAsync(ulong.Parse(data.MessageId));
             var role = Bot.Client.GetGuild(Context.Guild.Id).GetRole(ulong.Parse(data.RoleId));
 
-            embed.Description += $"Id:{data.Id} Message: {message.GetJumpUrl()} Role: {role.Name} Emote: {data.Emote}\n";
+            embed.Description += $"Id: {data.Id} - Message: {message.GetJumpUrl()} Role: {role.Mention} Emote: {data.Emote}\n";
         }
         
         await RespondAsync(embed: embed.Build());

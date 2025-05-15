@@ -18,6 +18,8 @@ public partial class RentCommand : InteractionModuleBase<SocketInteractionContex
             return;
         }
 
+        await DeferAsync();
+
         List<IGuildUser> guildUsers = new();
         string userMention = "";
 
@@ -39,7 +41,7 @@ public partial class RentCommand : InteractionModuleBase<SocketInteractionContex
             userMention += user.Mention + "\n";
         }
 
-        await RespondAsync(embed: await EmbedBuilderService.CreateBasicEmbed("VC Renting",
+        await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("VC Renting",
             "ผู้ใช้ดังต่อไปนี้สามารถเข้า VC คุณได้แล้ว\n\n" + userMention, Color.Magenta));
     }
 }

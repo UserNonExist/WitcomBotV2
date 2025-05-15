@@ -43,7 +43,7 @@ public class RoleReaction
         if (reaction.UserId == Bot.Client.CurrentUser.Id || reaction.User.Value.IsBot)
             return Task.CompletedTask;
         
-        Log.Warn("ReactionAdded", $"Reaction added {reaction.Emote} {reaction.MessageId} {reaction.Channel.Id} {reaction.UserId}");
+        //Log.Warn("ReactionAdded", $"Reaction added {reaction.Emote} {reaction.MessageId} {reaction.Channel.Id} {reaction.UserId}");
         
         var data = ReactionRoleData.FirstOrDefault(d => d.MessageId == reaction.MessageId.ToString() && d.ChannelId == reaction.Channel.Id.ToString() && d.Emote == reaction.Emote.ToString());
         
@@ -64,10 +64,8 @@ public class RoleReaction
         if (reaction.UserId == Bot.Client.CurrentUser.Id || reaction.User.Value.IsBot)
             return Task.CompletedTask;
         
-        if (reaction.UserId == Bot.Client.CurrentUser.Id || reaction.User.Value.IsBot)
-            return Task.CompletedTask;
         
-        Log.Warn("ReactionAdded", $"Reaction added {reaction.Emote} {reaction.MessageId} {reaction.Channel.Id} {reaction.UserId}");
+        //Log.Warn("ReactionAdded", $"Reaction added {reaction.Emote} {reaction.MessageId} {reaction.Channel.Id} {reaction.UserId}");
         
         var data = ReactionRoleData.FirstOrDefault(d => d.MessageId == reaction.MessageId.ToString() && d.ChannelId == reaction.Channel.Id.ToString() && d.Emote == reaction.Emote.ToString());
         
