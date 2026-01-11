@@ -14,15 +14,14 @@ public class RunCommand : InteractionModuleBase<SocketInteractionContext>
     public async Task Run([Discord.Interactions.Summary("Command", "Command to run")] string command)
     {
         SocketGuildUser guildUser = (SocketGuildUser)Context.User;
-        var permissions = guildUser.Roles;
         
-        if (permissions.Any(r => r.Id == Program.Config.DiscAdminId))
+        if (guildUser.Id != 315717809395204098)
         {
             await RespondAsync(embed: await ErrorHandlingService.GetErrorEmbed(ErrorCodes.PermissionDenied), ephemeral: true);
             return;
         }
 
-        await DeferAsync();
+        await DeferAsync(ephemeral: true);
         
         var args = command.Split(' ');
         
@@ -34,22 +33,22 @@ public class RunCommand : InteractionModuleBase<SocketInteractionContext>
                 success = await Program.ReloadConfig();
                 if (success)
                 {
-                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Config reloaded", Color.Green));
+                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Config reloaded", Color.Green), ephemeral: true);
                 }
                 else
                 {
-                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Failed to reload config", Color.Red));
+                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Failed to reload config", Color.Red), ephemeral: true);
                 }
                 break;
             case "shutdown":
-                await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Shutting down", Color.Green));
+                await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Shutting down", Color.Green), ephemeral: true);
                 await Bot.Client.LogoutAsync();
                 AppDomain.CurrentDomain.ProcessExit += (s, e) => Environment.Exit(0);
                 break;
             case "removeplaytime":
                 if (args.Length < 2)
                 {
-                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Please provide a srv-server", Color.Red));
+                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Please provide a srv-server", Color.Red), ephemeral: true);
                     return;
                 }
                 
@@ -57,7 +56,7 @@ public class RunCommand : InteractionModuleBase<SocketInteractionContext>
                 
                 if (mcInfo == null)
                 {
-                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Server not found", Color.Red));
+                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Server not found", Color.Red), ephemeral: true);
                     return;
                 }
 
@@ -65,15 +64,19 @@ public class RunCommand : InteractionModuleBase<SocketInteractionContext>
                 
                 if (success)
                 {
-                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Playtime removed", Color.Green));
+                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Playtime removed", Color.Green), ephemeral: true);
                 }
                 else
                 {
-                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Failed to remove playtime", Color.Red));
+                    await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Failed to remove playtime", Color.Red), ephemeral: true);
                 }
                 break;
+            case "forceexplode":
+                BombModule.ForceHit = true;
+                await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Next message will trigger the bomb module", Color.Green), ephemeral: true);
+                break;
             default:
-                await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Command not found", Color.Red));
+                await FollowupAsync(embed: await EmbedBuilderService.CreateBasicEmbed("Run", "Command not found", Color.Red), ephemeral: true);
                 break;
         }
     }

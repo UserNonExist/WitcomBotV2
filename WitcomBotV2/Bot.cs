@@ -66,6 +66,7 @@ public class Bot
         
         Log.Debug(nameof(Init), "Setting up message handlers..");
         Client.MessageReceived += PingTriggers.HandleMessage;
+        Client.MessageReceived += BombModule.MessageReceived;
         
         Log.Debug(nameof(Init), "Setting up minecraft tcp ping...");
         MinecraftModule = new MinecraftModule();

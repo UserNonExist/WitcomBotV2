@@ -13,6 +13,9 @@ public class Config
     public int TriggerLengthLimit { get; set; }
     public ulong ChannelRentId { get; set; }
     public ulong ChannelRentCatId { get; set; }
+    public int BombModuleHitChance { get; set; }
 
     public List<MinecraftServerOption> MinecraftServers { get; set; } = new();
+
+    public List<ulong> BombModuleGuildId { get; set; } = new();
 }
